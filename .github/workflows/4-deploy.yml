@@ -1,0 +1,28 @@
+name: Publish quiz site
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - run: unzip -o 2-site-deploy-1648.zip -d bundle && unzip -o 2-patch1659.zip -d bundle && unzip -o 1-score-words.zip -d bundle && unzip -o 1-final1647.zip -d bundle && unzip -o 1-print-site-0.zip -d bundle && unzip -o 2-print-site-1.zip -d bundle && mv bundle/site public
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
