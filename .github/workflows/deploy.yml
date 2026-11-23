@@ -18,7 +18,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
-      - run: unzip -o 2-site-deploy-1648.zip -d bundle && mv bundle/site public
+      - run: unzip -o 2-site-deploy-1648.zip -d bundle && unzip -o 2-patch1659.zip -d bundle && mv bundle/site public
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
