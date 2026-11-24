@@ -1,0 +1,33 @@
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:Tahoma,Arial,sans-serif;background:#f4f6f6;color:#111;min-height:100vh}
+header{background:#0b6e72;color:#fff;text-align:center;padding:14px 8px;border-bottom:4px solid #f2b705}
+header h1{margin:0;font-size:26px}
+header .by{margin:6px 0 0;font-size:15px;color:#ffe9a8}
+main{max-width:860px;margin:0 auto;padding:16px 12px 40px}
+h2{font-size:22px}
+.facts{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.facts span{background:#e3f0f0;border:1px solid #0b6e72;color:#064a52;border-radius:8px;padding:6px 12px;font-weight:bold}
+.muted{color:#666;font-size:14px}
+.note{background:#fff8e1;border:1px solid #f2b705;border-radius:8px;padding:8px 12px}
+.actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+button{font-family:inherit;font-size:17px;padding:12px 20px;border-radius:10px;border:2px solid #0b6e72;background:#fff;color:#064a52;cursor:pointer}
+button.primary{background:#0b6e72;color:#fff;font-weight:bold}
+button:disabled{opacity:.5;cursor:default}
+.bar{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #ccc;border-radius:10px;padding:8px 14px;margin-bottom:10px;font-weight:bold}
+.timer{font-size:22px;color:#0b6e72;font-variant-numeric:tabular-nums}
+.timer.low{color:#c00}
+.question-reader{background:#fff;border:1px solid #ccc;border-radius:10px;overflow:hidden;text-align:center}
+img.question{width:100%;display:block}
+#zoom{max-width:95vw}
+#zoom img{max-width:90vw;max-height:80vh;display:block}
+#zoom form{text-align:center;margin-top:8px}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.opts button{font-size:24px;font-weight:bold;padding:14px 0}
+.opts button.selected{background:#f2b705;border-color:#b98a00;color:#111}
+.score{font-size:34px;color:#0b6e72;text-align:center}
+.resultrow{background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 12px;margin:6px 0}
+@media (max-width:520px){
+  .opts{grid-template-columns:repeat(2,1fr)}
+  header h1{font-size:22px}
+}
