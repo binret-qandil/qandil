@@ -23,6 +23,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v4
         with:
           path: public
+      - run: sleep 30
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
