@@ -18,7 +18,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
-      - run: unzip -o 2-site-deploy-1648.zip -d bundle && unzip -o 2-patch1659.zip -d bundle && unzip -o 1-score-words.zip -d bundle && unzip -o 1-final1647.zip -d bundle && unzip -o 1-print-site-0.zip -d bundle && unzip -o 2-print-site-1.zip -d bundle && unzip -o 1-q14-sync.zip -d bundle && unzip -o 2-1-source-sync.zip -d bundle && unzip -o 1-prime-source-sync.zip -d bundle && mv bundle/site public && cp -r usus public/usus
+      - run: unzip -o 2-site-deploy-1648.zip -d bundle && unzip -o 2-patch1659.zip -d bundle && unzip -o 1-score-words.zip -d bundle && unzip -o 1-final1647.zip -d bundle && unzip -o 1-print-site-0.zip -d bundle && unzip -o 2-print-site-1.zip -d bundle && unzip -o 1-q14-sync.zip -d bundle && unzip -o 2-1-source-sync.zip -d bundle && unzip -o 1-prime-source-sync.zip -d bundle && mv bundle/site public && cp -r usus public/usus && unzip -o 13-usus-correction-overlay.zip -d public/usus
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
