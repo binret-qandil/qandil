@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>اختبار كمي قدرات</title>
+<meta name="description" content="اختبار تفاعلي بمؤقّت وتصحيح تلقائي فوري، من إعداد أ/ أحمد عادل.">
+<meta property="og:title" content="اختبار كمي قدرات">
+<meta property="og:description" content="اختبار تفاعلي بمؤقّت وتصحيح تلقائي فوري، من إعداد أ/ أحمد عادل.">
+<style>
+
+html { direction: rtl; }
+body {
+  margin: 0; background: #f4efec; color: #251f21;
+  font-family: 'Segoe UI', Tahoma, 'Noto Kufi Arabic', Arial, sans-serif;
+  font-size: 16.5px; -webkit-text-size-adjust: 100%;
+}
+.qd-page { max-width: 720px; margin: 0 auto; padding: 22px 14px 48px; }
+.qd-card { background: #fff; border-radius: 20px; padding: 30px 22px 24px; box-shadow: 0 1px 4px rgba(37,31,33,.08); }
+.qd-title { font-size: 30px; font-weight: 700; margin: 4px 0 10px; line-height: 1.5; }
+.qd-factline { color: #0e7c8b; font-weight: 600; font-size: 17px; margin: 0 0 14px; }
+.qd-intro { line-height: 2; margin: 0 0 4px; }
+.qd-h2 { font-size: 22px; font-weight: 700; margin: 28px 0 6px; }
+.qd-factrow { display: flex; justify-content: space-between; gap: 14px; padding: 12px 0; border-top: 1px solid #eae9ea; }
+.qd-factrow:first-child { border-top: none; }
+.qd-factrow .qd-fl { color: #585254; }
+.qd-note { background: #f7f5f4; border-right: 3px solid #0e7c8b; border-radius: 10px; padding: 12px 16px; line-height: 2; margin-top: 18px; }
+.qd-note b { display: block; margin-bottom: 2px; }
+.qd-footer { text-align: center; color: #8a8386; font-size: 14px; margin-top: 20px; }
+.qd-score-head { margin-bottom: 4px; }
+
+.qd-frame {
+  position: relative;
+  border: 3px solid #0e7c8b;
+  border-radius: 20px;
+  padding: 26px 20px;
+  margin: 4px 0 16px;
+}
+.qd-frame::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1.5px solid #0e7c8b;
+  border-radius: 13px;
+  pointer-events: none;
+}
+.qd-topics { margin: 8px 0 0; line-height: 1.9; }
+.qd-startrow { display: flex; justify-content: center; margin: 18px 0 6px; }
+.qd-btn {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1.5px solid #0e7c8b;
+  padding: 12px 22px;
+  min-height: 48px;
+  cursor: pointer;
+  background: #fff;
+  color: #0e7c8b;
+}
+.qd-btn:disabled { opacity: 0.4; cursor: default; }
+.qd-primary { background: #0e7c8b; color: #fff; }
+.qd-ghost { background: transparent; color: #0e7c8b; }
+.qd-big { font-size: 19px; padding: 14px 44px; }
+.qd-compact { min-height: 40px; padding: 8px 14px; font-size: 14px; }
+.qd-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+}
+.qd-timer {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0e7c8b;
+  font-variant-numeric: tabular-nums;
+}
+.qd-low { color: #ed313e; }
+.qd-progress { font-weight: 600; }
+.qd-track { height: 8px; border-radius: 4px; background: #eae9ea; overflow: hidden; margin-bottom: 18px; }
+.qd-fill { height: 100%; background: #0e7c8b; transition: width 0.3s ease; }
+.qd-qcard { margin-bottom: 16px; }
+.qd-qhead { display: flex; justify-content: flex-start; margin-bottom: 6px; }
+.qd-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 6px;
+  border-radius: 50%;
+  background: #0e7c8b;
+  color: #fff;
+  font-weight: 700;
+  font-size: 17px;
+}
+.qd-badge.qd-small { min-width: 30px; height: 30px; font-size: 14px; }
+.qd-stem { font-size: 19px; font-weight: 600; line-height: 2; margin: 8px 0 16px; }
+.qd-rstem { font-size: 16px; font-weight: 500; margin: 6px 0 10px; }
+.qd-opts { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 560px) {
+  .qd-opts { grid-template-columns: 1fr 1fr; }
+}
+.qd-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1.5px solid #eae9ea;
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  font-size: 17px;
+  text-align: start;
+  cursor: pointer;
+}
+.qd-opt:hover { border-color: #0e7c8b; }
+.qd-sel { border-color: #0e7c8b; background: #e6f3f4; box-shadow: inset 0 0 0 1px #0e7c8b; }
+.qd-letter { color: #0e7c8b; font-weight: 700; white-space: nowrap; }
+.qd-optval { flex: 1; text-align: right; }
+.qd-review .qd-opt { cursor: default; }
+.qd-review .qd-opt:hover { border-color: #eae9ea; }
+.qd-review .qd-correct:hover { border-color: #0e7c8b; }
+.qd-review .qd-wrong:hover { border-color: #ed313e; }
+.qd-correct { border-color: #0e7c8b !important; background: #e6f3f4; }
+.qd-wrong { border-color: #ed313e !important; background: #fdecec; }
+.qd-mark { font-weight: 700; font-size: 18px; }
+.qd-mok { color: #0e7c8b; }
+.qd-mbad { color: #ed313e; }
+.qd-nav { display: flex; justify-content: space-between; gap: 12px; margin: 6px 0 4px; }
+.qd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+.qd-gbtn {
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1.5px solid #eae9ea;
+  background: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.qd-gbtn.qd-done { background: #0e7c8b; color: #fff; border-color: #0e7c8b; }
+.qd-gbtn.qd-cur { outline: 2.5px solid #0e7c8b; outline-offset: 1px; }
+.qd-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(37, 31, 33, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 50;
+}
+.qd-dialog {
+  background: #fff;
+  border-radius: 16px;
+  border: 2px solid #0e7c8b;
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+}
+.qd-dlgt { font-size: 20px; font-weight: 700; margin: 0 0 8px; }
+.qd-dlg { line-height: 1.9; margin: 0 0 18px; }
+.qd-dlgb { display: flex; gap: 10px; flex-wrap: wrap; }
+.qd-score { text-align: center; margin: 10px 0 16px; }
+.qd-scorebig { font-size: 52px; font-weight: 700; color: #0e7c8b; line-height: 1.1; }
+.qd-of { font-size: 24px; color: #585254; }
+.qd-pct { font-size: 22px; font-weight: 600; color: #0e7c8b; }
+.qd-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+.qd-stat {
+  border: 1.5px solid #eae9ea;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.qd-statn { font-size: 24px; font-weight: 700; }
+.qd-statl { font-size: 13px; color: #585254; }
+.qd-ok .qd-statn { color: #0e7c8b; }
+.qd-bad .qd-statn { color: #ed313e; }
+.qd-rq { border-top: 1px solid #eae9ea; padding: 14px 0; }
+.qd-rqhead { display: flex; align-items: center; gap: 10px; }
+.qd-chip { font-size: 13px; font-weight: 600; color: #585254; border: 1px solid #eae9ea; border-radius: 999px; padding: 3px 12px; }
+.qd-chipok { color: #0e7c8b; border-color: #0e7c8b; }
+.qd-chipbad { color: #ed313e; border-color: #ed313e; }
+.qd-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: -0.6em;
+  margin: 0 0.2em;
+  line-height: 1.3;
+  font-size: 0.92em;
+}
+.qd-fn { border-bottom: 1.6px solid currentColor; padding: 0 0.3em; }
+.qd-fd { padding: 0 0.3em; }
+.qd-sup { font-size: 0.7em; }
+.qd-root { display: inline-flex; align-items: flex-start; white-space: nowrap; }
+.qd-ri { font-size: 0.72em; margin-inline-start: 0.1em; margin-top: -0.62em; }
+.qd-rz { position: relative; display: inline-block; padding-inline-start: 0.72em; }
+.qd-rsvg { position: absolute; top: 0.02em; inset-inline-end: 0; width: 100%; height: 1.05em; }
+.qd-rb { display: inline-block; padding-top: 0.22em; }
+.qd-steps { margin-top: 6px; }
+.qd-step { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid #eae9ea; line-height: 1.9; }
+.qd-step:first-child { border-top: none; }
+.qd-stepn { color: #0e7c8b; font-weight: 700; min-width: 1.2em; }
+
+</style>
+</head>
+<body>
+<div class="qd-page"><div class="qd-card" id="app"></div></div>
+<script>
+
+const QUESTIONS = [{"n": 1, "stem": "إذا كان <span class=\"qd-supw\">س<sup class=\"qd-sup\">٢</sup></span> = ٣٢٤ فإن قيمة س تساوي:", "opts": ["١٦", "١٧", "١٨", "١٩"], "correct": 2}, {"n": 2, "stem": "<span class=\"qd-root\"><sup class=\"qd-ri\">٣</sup><span class=\"qd-rz\"><svg class=\"qd-rsvg\" viewBox=\"0 0 100 30\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path d=\"M2 5 H94 L92 12 L86 29 L79 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" vector-effect=\"non-scaling-stroke\"/></svg><span class=\"qd-rb\">٣٤٣</span></span></span> =", "opts": ["٥", "٦", "٧", "٩"], "correct": 2}, {"n": 3, "stem": "أي الأعداد التالية يقبل القسمة على ٣؟", "opts": ["٢٢١٦", "٥٥٢٨", "٢١٣٩", "٤١٣٥"], "correct": 2}, {"n": 4, "stem": "أي الأعداد التالية يقبل القسمة على ٤؟", "opts": ["٧٣١٦", "٥٥٣٧", "١٣١٨", "٥٥٢٦"], "correct": 0}, {"n": 5, "stem": "مصنع ينتج ٤ أنواع من العصير بالترتيب (فراولة، مانجو، تفاح، أناناس)، فما نوع العلبة رقم ١١٥؟", "opts": ["فراولة", "مانجو", "تفاح", "أناناس"], "correct": 2}, {"n": 6, "stem": "أي الأعداد التالية يقبل القسمة على ١١؟", "opts": ["٨٥٥٧", "٦٥٤٥", "٧٣١٢", "٩٨٩٨"], "correct": 1}, {"n": 7, "stem": "سلّم يمكن عدّه ثلاثة ثلاثة دون باقٍ، وخمسة خمسة دون باقٍ، وستة ستة دون باقٍ، فما أقل عدد من درجاته؟", "opts": ["٢٠", "٣٠", "٤٠", "٦٠"], "correct": 1}, {"n": 8, "stem": "عدد الأعداد الأولية من ١ إلى ٣٠ هو:", "opts": ["٨", "٩", "١٠", "١١"], "correct": 2}, {"n": 9, "stem": "أي الأعداد التالية عدد أولي؟", "opts": ["١٠١", "١٠٢", "١٠٥", "١١١"], "correct": 0}, {"n": 10, "stem": "<span class=\"qd-frac\"><span class=\"qd-fn\">٢</span><span class=\"qd-fd\">٩</span></span> + <span class=\"qd-frac\"><span class=\"qd-fn\">٥</span><span class=\"qd-fd\">٩</span></span> =", "opts": ["<span class=\"qd-frac\"><span class=\"qd-fn\">٧</span><span class=\"qd-fd\">١٨</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٧</span><span class=\"qd-fd\">٩</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٣</span><span class=\"qd-fd\">٩</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">١</span><span class=\"qd-fd\">٩</span></span>"], "correct": 1}, {"n": 11, "stem": "يقضي ماجد ثلث يومه في النوم وربع يومه في الدراسة، فما الكسر الذي يقضيه في باقي اليوم؟", "opts": ["<span class=\"qd-frac\"><span class=\"qd-fn\">٢</span><span class=\"qd-fd\">٧</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٥</span><span class=\"qd-fd\">٧</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٥</span><span class=\"qd-fd\">١٢</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٧</span><span class=\"qd-fd\">١٢</span></span>"], "correct": 2}, {"n": 12, "stem": "العدد الكسري <span class=\"qd-frac\"><span class=\"qd-fn\">٣</span><span class=\"qd-fd\">٤</span></span> ٢ يساوي:", "opts": ["<span class=\"qd-frac\"><span class=\"qd-fn\">٦</span><span class=\"qd-fd\">٤</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٨</span><span class=\"qd-fd\">٤</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">٩</span><span class=\"qd-fd\">٤</span></span>", "<span class=\"qd-frac\"><span class=\"qd-fn\">١١</span><span class=\"qd-fd\">٤</span></span>"], "correct": 3}, {"n": 13, "stem": "٢٫٨ + ٣٫٢٣١ =", "opts": ["٣٫٥١١", "٥٫٥١١", "٦٫٠٣١", "٦٫٣١"], "correct": 2}, {"n": 14, "stem": "أقرب عدد إلى ٦٫٧ هو:", "opts": ["٦٫٦٩", "٦٫٨", "٦٫٦", "٦٫٧٤"], "correct": 0}, {"n": 15, "stem": "الكسر <span class=\"qd-frac\"><span class=\"qd-fn\">٥</span><span class=\"qd-fd\">٨</span></span> يساوي:", "opts": ["٠٫٥٨", "٠٫٦٢٥", "٠٫٨٥", "٠٫١٢٥"], "correct": 1}, {"n": 16, "stem": "٦٫٣٥ × ١٠٠ =", "opts": ["٦٣٫٥", "٦٣٥", "٦٣٥٠", "٠٫٦٣٥"], "correct": 1}, {"n": 17, "stem": "اشترى أحمد ٥ أقلام بمبلغ ٤٥ ريالًا، فكم قلمًا يشتري بمبلغ ٨١ ريالًا؟", "opts": ["٧", "٨", "٩", "١٠"], "correct": 2}, {"n": 18, "stem": "دلو سعته ٠٫٠٣ <span class=\"qd-supw\">م<sup class=\"qd-sup\">٣</sup></span> يُستخدم لملء إناء سعته ١٢ <span class=\"qd-supw\">م<sup class=\"qd-sup\">٣</sup></span>، كم مرة يجب ملء الدلو لملء الإناء؟", "opts": ["٤ مرات", "٤٠ مرة", "٤٠٠ مرة", "٤٠٠٠ مرة"], "correct": 2}, {"n": 19, "stem": "ينهي ٥٦ عاملًا مشروعًا في ٣ أيام، فكم عاملًا يلزم لإنهاء المشروع نفسه في يومين؟", "opts": ["٧٢", "٨٤", "٩٠", "٩٦"], "correct": 1}, {"n": 20, "stem": "٤ بقرات تنتج ٤ علب حليب في ٤ أيام، فكم يومًا تحتاج ٨ بقرات لإنتاج ٨ علب؟", "opts": ["٣", "٤", "٥", "٦"], "correct": 1}, {"n": 21, "stem": "حفل به ٤٨ مدعوًّا، وكانت نسبة الرجال إلى النساء ٥:٣، فكم عدد الرجال في الحفل؟", "opts": ["٢٥", "٣٠", "١٨", "١٥"], "correct": 1}, {"n": 22, "stem": "إذا كان ثمن ٣ أثواب ٢٤٠ ريالًا، فإن ثمن ٨ أثواب يساوي:", "opts": ["٤٦٠ ريالًا", "٦٣٠ ريالًا", "٦٤٠ ريالًا", "٦١٠ ريالًا"], "correct": 2}, {"n": 23, "stem": "النسبة بين قياسات زوايا مثلث هي ٢:٣:٤، فما قياس أصغر زاوية؟", "opts": ["١٠°", "٢٠°", "٤٠°", "٦٠°"], "correct": 2}, {"n": 24, "stem": "١٥ + <bdo dir=\"ltr\">(١٢-)</bdo> =", "opts": ["٣", "<bdo dir=\"ltr\">٣-</bdo>", "٢٧", "<bdo dir=\"ltr\">٢٧-</bdo>"], "correct": 0}, {"n": 25, "stem": "قارن بين:<br>القيمة الأولى: <span class=\"qd-supw\"><bdo dir=\"ltr\">(٢-)</bdo><sup class=\"qd-sup\">٦</sup></span> ، القيمة الثانية: <span class=\"qd-supw\"><bdo dir=\"ltr\">(٢-)</bdo><sup class=\"qd-sup\">٩</sup></span>", "opts": ["القيمة الأولى أكبر", "القيمة الثانية أكبر", "القيمتان متساويتان", "المعطيات غير كافية"], "correct": 0}, {"n": 26, "stem": "<bdo dir=\"ltr\">(٥-)</bdo> × <bdo dir=\"ltr\">(٢-)</bdo> =", "opts": ["١٠", "<bdo dir=\"ltr\">١٠-</bdo>", "٧", "<bdo dir=\"ltr\">٧-</bdo>"], "correct": 0}, {"n": 27, "stem": "٩ × <bdo dir=\"ltr\">(٦-)</bdo> =", "opts": ["٥٤", "<bdo dir=\"ltr\">٥٤-</bdo>", "١٥", "<bdo dir=\"ltr\">١٥-</bdo>"], "correct": 1}, {"n": 28, "stem": "<bdo dir=\"ltr\">(٤٢-)</bdo> ÷ ٦ =", "opts": ["<bdo dir=\"ltr\">٧-</bdo>", "٧", "<bdo dir=\"ltr\">٨-</bdo>", "٨"], "correct": 0}, {"n": 29, "stem": "<bdo dir=\"ltr\">(٤٥-)</bdo> ÷ <bdo dir=\"ltr\">(٩-)</bdo> =", "opts": ["<bdo dir=\"ltr\">٥-</bdo>", "٥", "<bdo dir=\"ltr\">٦-</bdo>", "٦"], "correct": 1}, {"n": 30, "stem": "٢٫٥ × ٠٫٤ =", "opts": ["١", "٠٫١", "١٠", "١٠٠"], "correct": 0}];
+const TOTAL_SECONDS = 30 * 60;
+const LETTERS = ['أ', 'ب', 'ج', 'د'];
+const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+const toAr = (v) => String(v).replace(/[0-9]/g, (d) => AR_DIGITS[Number(d)]);
+const fmtTime = (s) => toAr(Math.floor(s / 60)) + ':' + toAr(String(s % 60).padStart(2, '0'));
+
+let screen = 'intro';
+let current = 0;
+let answers = [];
+let remaining = TOTAL_SECONDS;
+let confirming = false;
+let timerId = null;
+
+const app = document.getElementById('app');
+
+function start() {
+  answers = QUESTIONS.map(() => null);
+  current = 0;
+  remaining = TOTAL_SECONDS;
+  confirming = false;
+  screen = 'quiz';
+  render();
+  if (timerId) clearInterval(timerId);
+  timerId = setInterval(() => {
+    remaining = Math.max(0, remaining - 1);
+    const t = document.getElementById('qd-timer');
+    if (t) {
+      t.textContent = fmtTime(remaining);
+      t.classList.toggle('qd-low', remaining <= 300);
+    }
+    if (remaining === 0) finish();
+  }, 1000);
+}
+
+function finish() {
+  if (timerId) { clearInterval(timerId); timerId = null; }
+  confirming = false;
+  screen = 'result';
+  render();
+}
+
+function introHtml() {
+  return `
+  <div class="qd-frame">
+    <h1 class="qd-title">اختبار كمي قدرات</h1>
+    <p class="qd-factline">${toAr(QUESTIONS.length)} سؤالًا في ${toAr(30)} دقيقة</p>
+    <p class="qd-intro">اختبار تفاعلي بمؤقّت وتصحيح تلقائي فوري، من إعداد أ/ أحمد عادل.</p>
+    <h2 class="qd-h2">عن الاختبار</h2>
+    <div class="qd-facts">
+      <div class="qd-factrow"><span class="qd-fl">عدد الأسئلة</span><span>${toAr(QUESTIONS.length)} سؤالًا</span></div>
+      <div class="qd-factrow"><span class="qd-fl">الزمن</span><span>${toAr(30)} دقيقة</span></div>
+      <div class="qd-factrow"><span class="qd-fl">التصحيح</span><span>تلقائي فور الانتهاء</span></div>
+    </div>
+    <p class="qd-topics">الموضوعات: المهارات الحسابية، الكسور، الأعداد العشرية، النسبة والتناسب، والمهارات الجبرية.</p>
+    <h2 class="qd-h2">طريقة الاختبار</h2>
+    <div class="qd-steps">
+      <div class="qd-step"><span class="qd-stepn">${toAr(1)}</span><span>اضغط «ابدأ الاختبار» فيعمل المؤقّت فورًا.</span></div>
+      <div class="qd-step"><span class="qd-stepn">${toAr(2)}</span><span>اختر إجابة لكل سؤال، وتنقّل بحرية بين الأسئلة من الأرقام بالأسفل.</span></div>
+      <div class="qd-step"><span class="qd-stepn">${toAr(3)}</span><span>أنهِ الاختبار في أي وقت، أو انتظر انتهاء الزمن، وستظهر نتيجتك مع مراجعة كل سؤال.</span></div>
+    </div>
+    <div class="qd-note"><b>نموذج أولي</b>يحتوي حاليًا على اختبار واحد. نتيجتك تُحسب على جهازك ولا تُحفظ ولا تُرسل إلى أحد.</div>
+    <div class="qd-startrow"><button type="button" class="qd-btn qd-primary qd-big" onclick="start()">ابدأ الاختبار</button></div>
+  </div>
+  <div class="qd-footer">إعداد أ/ أحمد عادل، اختبار كمي قدرات.</div>`;
+}
+
+function quizHtml() {
+  const q = QUESTIONS[current];
+  const answered = answers.filter((a) => a !== null).length;
+  const opts = q.opts.map((o, i) => `
+    <button type="button" class="qd-opt${answers[current] === i ? ' qd-sel' : ''}" onclick="choose(${i})">
+      <span class="qd-letter">(${LETTERS[i]})</span>
+      <span class="qd-optval">${o}</span>
+    </button>`).join('');
+  const grid = QUESTIONS.map((qq, i) => `
+    <button type="button" class="qd-gbtn${answers[i] !== null ? ' qd-done' : ''}${i === current ? ' qd-cur' : ''}" onclick="goTo(${i})">${toAr(qq.n)}</button>`).join('');
+  const overlay = confirming ? `
+    <div class="qd-overlay" role="dialog" aria-modal="true">
+      <div class="qd-dialog">
+        <p class="qd-dlgt">إنهاء الاختبار؟</p>
+        <p class="qd-dlg">أجبت عن ${toAr(answered)} من ${toAr(QUESTIONS.length)} سؤالًا. سيُصحَّح الاختبار فورًا وتظهر نتيجتك.</p>
+        <div class="qd-dlgb">
+          <button type="button" class="qd-btn qd-primary" onclick="finish()">إنهاء والتصحيح</button>
+          <button type="button" class="qd-btn qd-ghost" onclick="confirming=false;render()">متابعة الحل</button>
+        </div>
+      </div>
+    </div>` : '';
+  return `
+  <div class="qd-frame">
+    <div class="qd-bar">
+      <span class="qd-timer${remaining <= 300 ? ' qd-low' : ''}" id="qd-timer">${fmtTime(remaining)}</span>
+      <span class="qd-progress">سؤال ${toAr(current + 1)} من ${toAr(QUESTIONS.length)}</span>
+      <button type="button" class="qd-btn qd-ghost qd-compact" onclick="confirming=true;render()">إنهاء والتصحيح</button>
+    </div>
+    <div class="qd-track"><div class="qd-fill" style="width:${(answered / QUESTIONS.length) * 100}%"></div></div>
+    <div class="qd-qcard">
+      <div class="qd-qhead"><span class="qd-badge">${toAr(q.n)}</span></div>
+      <div class="qd-stem">${q.stem}</div>
+      <div class="qd-opts">${opts}</div>
+    </div>
+    <div class="qd-nav">
+      <button type="button" class="qd-btn qd-ghost" ${current === 0 ? 'disabled' : ''} onclick="goTo(${current - 1})">السابق</button>
+      ${current < QUESTIONS.length - 1
+        ? `<button type="button" class="qd-btn qd-primary" onclick="goTo(${current + 1})">التالي</button>`
+        : `<button type="button" class="qd-btn qd-primary" onclick="confirming=true;render()">إنهاء الاختبار</button>`}
+    </div>
+    <div class="qd-grid" aria-label="الانتقال إلى سؤال">${grid}</div>
+    ${overlay}
+  </div>`;
+}
+
+function resultHtml() {
+  const answered = answers.filter((a) => a !== null).length;
+  const score = QUESTIONS.reduce((s, q, i) => (answers[i] === q.correct ? s + 1 : s), 0);
+  const wrong = answered - score;
+  const skipped = QUESTIONS.length - answered;
+  const used = TOTAL_SECONDS - remaining;
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+  const verdict = pct >= 80 ? 'ممتاز! نتيجة رائعة.' : pct >= 50 ? 'جيد. راجع الأسئلة الخاطئة بالأسفل.' : 'تحتاج مزيدًا من التدريب. راجع الإجابات الصحيحة بالأسفل.';
+  const review = QUESTIONS.map((q, i) => {
+    const a = answers[i];
+    const state = a === null ? 'بدون إجابة' : a === q.correct ? 'صحيحة' : 'خاطئة';
+    const chipCls = a !== null && a === q.correct ? ' qd-chipok' : a === null ? '' : ' qd-chipbad';
+    const opts = q.opts.map((o, j) => {
+      const cls = j === q.correct ? 'qd-correct' : a === j ? 'qd-wrong' : '';
+      const mark = j === q.correct ? '<span class="qd-mark qd-mok">✓</span>'
+                 : a === j && j !== q.correct ? '<span class="qd-mark qd-mbad">✗</span>' : '';
+      return `<div class="qd-opt qd-ro ${cls}"><span class="qd-letter">(${LETTERS[j]})</span><span class="qd-optval">${o}</span>${mark}</div>`;
+    }).join('');
+    return `<div class="qd-rq">
+      <div class="qd-rqhead"><span class="qd-badge qd-small">${toAr(q.n)}</span><span class="qd-chip${chipCls}">${state}</span></div>
+      <div class="qd-stem qd-rstem">${q.stem}</div>
+      <div class="qd-opts qd-review">${opts}</div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="qd-frame">
+    <h1 class="qd-title qd-score-head">نتيجتك</h1>
+    <p class="qd-factline">الزمن المستغرق: ${fmtTime(used)}</p>
+    <p class="qd-intro">${verdict}</p>
+    <div class="qd-score">
+      <div class="qd-scorebig">${toAr(score)}<span class="qd-of"> / ${toAr(QUESTIONS.length)}</span></div>
+      <div class="qd-pct">${toAr(pct)}٪</div>
+    </div>
+    <div class="qd-stats">
+      <div class="qd-stat qd-ok"><span class="qd-statn">${toAr(score)}</span><span class="qd-statl">إجابة صحيحة</span></div>
+      <div class="qd-stat qd-bad"><span class="qd-statn">${toAr(wrong)}</span><span class="qd-statl">إجابة خاطئة</span></div>
+      <div class="qd-stat"><span class="qd-statn">${toAr(skipped)}</span><span class="qd-statl">بدون إجابة</span></div>
+    </div>
+    <div class="qd-startrow"><button type="button" class="qd-btn qd-primary qd-big" onclick="start()">إعادة الاختبار</button></div>
+    <h2 class="qd-h2">مراجعة الإجابات</h2>
+    ${review}
+  </div>
+  <div class="qd-footer">إعداد أ/ أحمد عادل، اختبار كمي قدرات.</div>`;
+}
+
+function choose(i) { answers[current] = i; render(); }
+function goTo(i) { if (i >= 0 && i < QUESTIONS.length) { current = i; render(); } }
+
+function render() {
+  app.innerHTML = screen === 'intro' ? introHtml() : screen === 'quiz' ? quizHtml() : resultHtml();
+  window.scrollTo(0, 0);
+}
+render();
+
+</script>
+</body>
+</html>
