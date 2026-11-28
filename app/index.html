@@ -47,8 +47,8 @@ h2.sec{color:#fff;font-size:20px;margin:22px 0 10px}
 .timer.low{background:var(--bad);border-color:var(--bad)}
 .qcard{background:var(--card);border-radius:16px;padding:16px;margin-top:12px}
 .qnum{color:var(--gold);font-weight:700;font-size:14px}
-.qimg{margin:10px 0;background:#fff;border-radius:8px;overflow:hidden;text-align:center}
-.qimg img{width:100%;height:auto;display:block;cursor:zoom-in}
+.qimg{margin:10px 0;background:#fff;border-radius:8px;overflow-x:auto;overscroll-behavior-x:contain;touch-action:pan-x pan-y;text-align:center}
+.qimg img{width:auto;max-width:none;height:auto;display:block;cursor:zoom-in;margin:0 auto}
 .zoomhint{font-size:11px;color:#6b7c8a;padding:3px 0 5px}
 #zoomer{position:fixed;inset:0;background:rgba(5,10,18,.97);z-index:999;display:none;flex-direction:column}
 #zoomer.open{display:flex}
@@ -185,7 +185,8 @@ function renderTimer(){
 }
 function onTimeUp(){
   if(SESS.timed==='q'){
-    // close current question and move on
+    // lock any in-progress selection, then close the question and move on
+    if(!SESS.checked[SESS.current])confirmAnswer();
     if(SESS.current<SESS.items.length-1){goQ(SESS.current+1);}
     else{finish();}
   }else{finish();}
@@ -229,7 +230,7 @@ function home(){
   </div>
   <div class="install"><b>ثبّت التطبيق على جوالك:</b><br>أندرويد: افتح الرابط في Chrome ثم ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br>آيفون: افتح الرابط في Safari ثم زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».</div>
   <div class="note">تقدّمك ونتائجك محفوظة على جهازك فقط، بلا حساب ولا تسجيل دخول.</div>
-  <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل</div>`;
+  <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل · للتواصل: 0575978083</div>`;
 }
 function lessonList(kind){ // kind: 'tests' | 'train'
   BACK=kind==='tests'?'#tests':'#train';
@@ -344,7 +345,7 @@ function renderQ(){
   <div class="prog"><i style="width:${Math.round((i)/n*100)}%"></i></div>
   <div class="qcard">
     <div class="qnum">سؤال ${ar(i+1)} من ${ar(n)} · صفحة ${ar(it.page)} من المذكرة</div>
-    <div class="qimg"><img src="${q.readerImage||q.image}" alt="السؤال" onclick="zoomImg(this.src)"><div class="zoomhint">اضغط على صورة السؤال لتكبيرها 🔍</div></div>
+    <div class="qimg"><img src="${q.readerImage||q.image}" alt="السؤال" onclick="zoomImg(this.src)"><div class="zoomhint">اسحب الصورة أفقيًا عند الحاجة · اضغط عليها للتكبير 🔍</div></div>
     ${input}
     ${fb}
     <div class="btnrow">
@@ -353,7 +354,7 @@ function renderQ(){
       ${trainMode&&!checked?`<button class="btn ghost" id="skipq">تخطَّ</button>`:''}
     </div>
   </div>`;
-  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{SESS.answers[i]=Number(b.dataset.k);if(SESS.timed){confirmAnswer();}else{renderQ();}});
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{SESS.answers[i]=Number(b.dataset.k);renderQ();});
   document.querySelectorAll('[data-mk]').forEach(b=>b.onclick=()=>{const k=Number(b.dataset.mk);let arr=Array.isArray(SESS.answers[i])?[...SESS.answers[i]]:[];arr=arr.includes(k)?arr.filter(x=>x!==k):[...arr,k];SESS.answers[i]=arr;renderQ();});
   const cf=$('#confirm');if(cf)cf.onclick=confirmAnswer;
   const nx=$('#nextq');if(nx)nx.onclick=()=>goQ(i+1);
@@ -376,10 +377,6 @@ function confirmAnswer(){
   }else{
     SESS.checked[i]=true;
     recordAnswer(SESS.items[i].page+'|'+q.id,!!grade(q,SESS.answers[i]));
-    // timed: auto-advance after short pause
-    persistSess();
-    setTimeout(()=>{if(SESS&&SESS.current===i){if(i<SESS.items.length-1)goQ(i+1);else finish();}},650);
-    return;
   }
   persistSess();renderQ();
 }
