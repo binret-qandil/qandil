@@ -154,7 +154,7 @@ async function loadPage(n){
     if(!hit)throw err;
     d=await hit.json();
   }
-  d.questions.forEach(q=>{if(STEP_SOL[q.id]&&STEP_SOL[q.id].k!=null)q.correct=String(STEP_SOL[q.id].k);q.answerSpec=Object.assign({},q.answerSpec,{option_index_1based:STEP_SOL[q.id].k+1});q.answerDisplay=['أ','ب','ج','د'][STEP_SOL[q.id].k];});
+  d.questions.forEach(q=>{if(STEP_SOL[q.id]&&STEP_SOL[q.id].k!=null){q.correct=String(STEP_SOL[q.id].k);q.answerSpec=Object.assign({},q.answerSpec,{option_index_1based:STEP_SOL[q.id].k+1});q.answerDisplay=['أ','ب','ج','د'][STEP_SOL[q.id].k];}});
   d.questions=d.questions.filter(q=>SUPPORTED.includes(q.type)&&!EXCLUDED_Q.has(q.id)&&HAS_SOLUTION(q));
   pageCache[n]=d;return d;
 }
