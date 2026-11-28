@@ -244,7 +244,6 @@ function home(){
     <button class="mbtn" onclick="startMock()"><span class="ic">⏱️</span><span>اختبار تجريبي شامل<small>${ar(25)} سؤالًا من كل الدروس في ${ar(25)} دقيقة</small></span></button>
     <button class="mbtn" onclick="route('#wrongs')"><span class="ic">🔁</span><span>مراجعة أخطائي<small>${wrongs?ar(wrongs)+' سؤالًا تحتاج مراجعة':'أخطاؤك السابقة تتجمع هنا للتدريب عليها'}</small></span></button>
   </div>
-  <div class="install" id="offlinebox"><b>العمل بلا إنترنت:</b> <button class="btn gold" id="dlbtn" onclick="downloadOffline()">${store.get().offline?'الأسئلة محمّلة ✓ (اضغط للتحديث)':'حمّل كل الأسئلة والحلول للاستخدام بلا إنترنت'}</button> <span id="dlstat" style="font-size:13px;color:#6b7c8a">${store.get().offline?'جاهز للعمل بلا إنترنت ✓':'يحتاج اتصالًا مرة واحدة للتحميل'}</span></div>
   <div class="install"><b>ثبّت التطبيق على جوالك:</b><br>أندرويد: افتح الرابط في Chrome ثم ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br>آيفون: افتح الرابط في Safari ثم زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».</div>
   <div class="note">تقدّمك ونتائجك محفوظة على جهازك فقط، بلا حساب ولا تسجيل دخول.</div>
   <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل · للتواصل: 0575978083</div>`;
