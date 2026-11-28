@@ -48,6 +48,7 @@ h2.sec{color:#fff;font-size:20px;margin:22px 0 10px}
 .qcard{background:var(--card);border-radius:16px;padding:16px;margin-top:12px}
 .qnum{color:var(--gold);font-weight:700;font-size:14px}
 .qimg{margin:10px 0;background:#fff;border-radius:8px;overflow-x:auto;overscroll-behavior-x:contain;touch-action:pan-x pan-y;text-align:center}
+.flow{direction:rtl;padding:6px 4px;cursor:zoom-in;text-align:right}.frow{display:flex;justify-content:flex-start;align-items:flex-end;margin:6px 0}.frow.wrap{flex-wrap:wrap;gap:4px 8px}.fchoice{margin:7px 0}.flow canvas{display:block;flex:none}.frow{max-width:100%}.fch{margin:8px 0;padding:4px 0;border-top:1px dashed #d8d2c2;border-bottom:1px dashed #d8d2c2}
 .qimg img{width:auto;max-width:none;height:auto;display:block;cursor:zoom-in;margin:0 auto}
 .zoomhint{font-size:11px;color:#6b7c8a;padding:3px 0 5px}
 .wrec{margin:8px 0;font-size:16px;color:#8a2f2f;background:#fdf3f3;border:1px solid #ecc;border-radius:8px;padding:8px}
@@ -111,25 +112,73 @@ function fitImg(im){
   try{
     const box=im.parentElement;if(!box||im.dataset.fit)return;im.dataset.fit='1';
     const W=im.naturalWidth,H=im.naturalHeight;if(!W||!H)return;
-    const f=Math.max(1,Math.floor(W/700));
-    const c=document.createElement('canvas');c.width=Math.ceil(W/f);c.height=Math.ceil(H/f);
-    const x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);
-    const d=x.getImageData(0,0,c.width,c.height).data;
-    let x0=c.width,x1=0,y0=c.height,y1=0;
-    for(let j=0;j<c.height;j++)for(let i=0;i<c.width;i++){const k=(j*c.width+i)*4;if(d[k]*0.3+d[k+1]*0.59+d[k+2]*0.11<150){if(i<x0)x0=i;if(i>x1)x1=i;if(j<y0)y0=j;if(j>y1)y1=j;}}
-    if(x1<=x0||y1<=y0)return;
-    const pad=10;
-    x0=Math.max(0,x0*f-pad);x1=Math.min(W,x1*f+pad);y0=Math.max(0,y0*f-pad);y1=Math.min(H,y1*f+pad);
-    const cw=x1-x0,ch=y1-y0;
-    const avail=Math.max(200,box.clientWidth-6);
-    let s=Math.min(1,avail/cw);const MIN=0.62;const pan=s<MIN;if(pan)s=MIN;
-    const w=document.createElement('div');
-    w.style.cssText='width:'+(cw*s)+'px;height:'+(ch*s)+'px;overflow:hidden;margin:0 auto';
-    im.parentNode.insertBefore(w,im);w.appendChild(im);
-    im.style.cssText='width:'+(W*s)+'px;max-width:none;height:auto;display:block;margin:'+(-y0*s)+'px 0 0 '+(-x0*s)+'px';
-    if(pan)setTimeout(()=>{box.scrollLeft=box.scrollWidth;},0);
-    else{const h=box.querySelector('.zoomhint');if(h)h.textContent=h.textContent.replace('اسحب الصورة أفقيًا عند الحاجة · ','');}
-  }catch(e){}
+    const c=document.createElement('canvas');c.width=W;c.height=H;
+    const x=c.getContext('2d',{willReadFrequently:true});x.fillStyle='#fff';x.fillRect(0,0,W,H);x.drawImage(im,0,0);
+    const d=x.getImageData(0,0,W,H).data,M=6;
+    const teal=(i,j)=>{const k=(j*W+i)*4,r=d[k],g=d[k+1],b=d[k+2];return r<90&&g>r+35&&b>r+35&&g<175;};
+    const ink=(i,j)=>{const k=(j*W+i)*4;return (d[k]*0.3+d[k+1]*0.59+d[k+2]*0.11<150)||teal(i,j);};
+    im.style.display='none';const avail=Math.max(200,Math.min(box.getBoundingClientRect().width,window.innerWidth-52)-12),dpr=window.devicePixelRatio||1;
+    // teal label components (grid flood fill)
+    const G=6,gw=Math.ceil(W/G),gh=Math.ceil(H/G),cell=new Int32Array(gw*gh);
+    for(let j=M;j<H-M;j++)for(let i=M;i<W-M;i++)if(teal(i,j))cell[((j/G)|0)*gw+((i/G)|0)]++;
+    const seen=new Uint8Array(gw*gh),labels=[];
+    for(let s0=0;s0<cell.length;s0++){if(!cell[s0]||seen[s0])continue;
+      const st=[s0];seen[s0]=1;let n=0,x0=1e9,x1=-1,y0=1e9,y1=-1;
+      while(st.length){const u=st.pop(),cx=u%gw,cy=(u/gw)|0;n+=cell[u];x0=Math.min(x0,cx);x1=Math.max(x1,cx);y0=Math.min(y0,cy);y1=Math.max(y1,cy);
+        for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||ny<0||nx>=gw||ny>=gh)continue;const v=ny*gw+nx;if(cell[v]&&!seen[v]){seen[v]=1;st.push(v);}}}
+      if(n>=25){let a=1e9,b=-1,c2=1e9,e=-1;for(let j=y0*G;j<Math.min(H-M,y1*G+G);j++)for(let i=x0*G;i<Math.min(W-M,x1*G+G);i++)if(teal(i,j)){if(i<a)a=i;if(i>b)b=i;if(j<c2)c2=j;if(j>e)e=j;}labels.push({x0:a,x1:b,y0:c2,y1:e});}}
+    if(labels.length<2)return fallback();
+    function fallback(){ // no choice labels found: whole image fitted to width, nothing cropped
+      im.style.cssText='width:100%;max-width:100%;height:auto;display:block';}
+    // rows of labels
+    labels.sort((p,q)=>(p.y0+p.y1)-(q.y0+q.y1));
+    const rows=[];for(const L of labels){const cy=(L.y0+L.y1)/2;const r=rows.find(r=>Math.abs(r.cy-cy)<(L.y1-L.y0)*0.9+8);if(r){r.items.push(L);r.cy=(r.cy*(r.items.length-1)+cy)/r.items.length;}else rows.push({cy,items:[L]});}
+    const dk=(i,j)=>{const k=(j*W+i)*4;return d[k]*0.3+d[k+1]*0.59+d[k+2]*0.11<140||teal(i,j);};
+    const rowHas=(xa,xb,ya,yb)=>{for(let j=Math.max(M,ya);j<=Math.min(H-M-1,yb);j++){let n=0;for(let i=xa;i<=xb;i++)if(dk(i,j)&&++n>=2)return true;}return false;};
+    const pieces=[];
+    rows.sort((p,q)=>p.cy-q.cy);
+    rows.forEach((r,ri)=>{r.lo=ri?(rows[ri-1].cy+r.cy)/2:-1e9;r.hi=ri<rows.length-1?(rows[ri+1].cy+r.cy)/2:1e9;});
+    for(const r of rows){r.items.sort((p,q)=>q.x1-p.x1);
+      r.items.forEach((L,k)=>{const nx=r.items[k+1];const xa=nx?nx.x1+3:M,xb=Math.min(W-M-1,L.x1+14);
+        let ya=L.y0,yb=L.y1;const lh=L.y1-L.y0+1,ymin=Math.max(r.lo,L.y0-Math.round(lh*1.8)),ymax=Math.min(r.hi,L.y1+Math.round(lh*1.8));
+        for(;;){let t=-1;for(let j=ya-1;j>=Math.max(M,ymin,ya-12);j--)if(rowHas(xa,xb,j,j)){t=j;break;}if(t<0)break;ya=t;}
+        for(;;){let t=-1;for(let j=yb+1;j<=Math.min(H-M-1,ymax,yb+12);j++)if(rowHas(xa,xb,j,j)){t=j;}if(t<0)break;yb=t;}
+        // tight x bbox
+        let a=1e9,b=-1;for(let j=ya;j<=yb;j++)for(let i=xa;i<=xb;i++)if(ink(i,j)){if(i<a)a=i;if(i>b)b=i;}
+        if(b>=a)pieces.push({x0:Math.max(1,a-4),x1:Math.min(W-2,b+4),y0:ya,y1:yb,row:rows.indexOf(r),k});});}
+    const cTop=Math.min(...pieces.map(p=>p.y0)),cBot=Math.max(...pieces.map(p=>p.y1));
+    // other regions: above choices (stem) and below (figure)
+    function bandsIn(ya,yb){const out=[];let st=-1,gap=0;
+      for(let j=Math.max(M,ya);j<=Math.min(H-M-1,yb);j++){let has=false;for(let i=M;i<W-M;i++)if(ink(i,j)){has=true;break;}
+        if(has){if(st<0)st=j;gap=0;}else if(st>=0){gap++;if(gap>=6){out.push([st,j-gap]);st=-1;gap=0;}}}
+      if(st>=0)out.push([st,Math.min(H-M-1,yb)]);
+      return out.map(([y0,y1])=>{let a=1e9,b=-1;for(let j=y0;j<=y1;j++)for(let i=M;i<W-M;i++)if(ink(i,j)){if(i<a)a=i;if(i>b)b=i;}return {x0:a,x1:b,y0,y1};}).filter(r=>r.x1-r.x0>=12||r.y1-r.y0>=12);}
+    const flow=document.createElement('div');flow.className='flow';flow.onclick=()=>zoomImg(im.src);
+    function chunk(parent,xa,xb,ya,yb,sc){const w=xb-xa+1,h=yb-ya+1;const cv=document.createElement('canvas');
+      cv.width=Math.max(1,Math.round(w*sc*dpr));cv.height=Math.max(1,Math.round(h*sc*dpr));
+      cv.style.width=(w*sc)+'px';cv.style.height=(h*sc)+'px';
+      const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cv.width,cv.height);g.imageSmoothingQuality='high';
+      g.drawImage(im,xa,ya,w,h,0,0,cv.width,cv.height);parent.appendChild(cv);}
+    function section(bs,textScale){for(const r of bs){const row=document.createElement('div');row.className='frow';
+      const w=r.x1-r.x0+1,h=r.y1-r.y0+1;
+      if(w/h>5&&w*textScale>avail){ // text line: break at word gaps, wrap right to left
+        row.classList.add('wrap');
+        const cols=[];for(let i=r.x0;i<=r.x1;i++){let hv=false;for(let j=r.y0;j<=r.y1;j++)if(ink(i,j)){hv=true;break;}cols.push(hv);}
+        const words=[];let a=-1,g=0;for(let k=0;k<cols.length;k++){if(cols[k]){if(a<0)a=k;g=0;}else if(a>=0){g++;if(g>=5){words.push([r.x0+a,r.x0+k-g]);a=-1;g=0;}}}
+        if(a>=0)words.push([r.x0+a,r.x1]);words.reverse();
+        for(const [xa,xb] of words)chunk(row,xa,xb,r.y0,r.y1,Math.min(textScale,avail/(xb-xa+1)));
+      }else chunk(row,r.x0,r.x1,r.y0,r.y1,Math.min(w/h>5?textScale:1,avail/w));
+      flow.appendChild(row);}}
+    section(bandsIn(M,cTop-1),0.85);
+    const ch=document.createElement('div');ch.className='fch';
+    pieces.sort((p,q)=>p.row-q.row||p.k-q.k);
+    for(const p of pieces){const row=document.createElement('div');row.className='frow fchoice';chunk(row,p.x0,p.x1,p.y0,p.y1,Math.min(1.3,avail/(p.x1-p.x0+1)));ch.appendChild(row);}
+    flow.appendChild(ch);
+    {const fb=bandsIn(cBot+1,H-M-1);if(fb.length){const r={x0:Math.min(...fb.map(b=>b.x0)),x1:Math.max(...fb.map(b=>b.x1)),y0:fb[0].y0,y1:fb[fb.length-1].y1};
+      const row=document.createElement('div');row.className='frow';chunk(row,r.x0,r.x1,r.y0,r.y1,Math.min(1,avail/(r.x1-r.x0+1)));flow.appendChild(row);}}
+    im.style.display='none';box.insertBefore(flow,im);
+    const hn=box.querySelector('.zoomhint');if(hn)hn.textContent=hn.textContent.replace('اسحب الصورة أفقيًا عند الحاجة · ','');
+  }catch(e){im.style.cssText='width:100%;max-width:100%;height:auto;display:block';}
 }
 function zoomImg(src){const o=$('#zoomer'),im=$('#zoomimg');im.src=src;zoomScale=1;im.style.width='100%';o.classList.add('open');document.body.style.overflow='hidden';}
 function zoomMult(f){const im=$('#zoomimg');zoomScale=Math.min(4,Math.max(.5,zoomScale*f));im.style.width=((im.naturalWidth||800)*zoomScale)+'px';}
@@ -489,7 +538,7 @@ function route(h){
 }
 window.addEventListener('hashchange',()=>{if(!SESS||!$('#timer'))route(location.hash||'#home');});
 const TOPICS_DATA={"lessons": [{"id": 14, "name": "النسبة والنسبة المئوية", "trainPages": [151, 152, 153, 154, 155, 156, 157], "tests": [{"name": "اختبار ١ على النسب المئوية", "pages": [158, 159, 160], "qCount": 19}, {"name": "اختبار ٢ على النسب المئوية", "pages": [161, 162, 163, 164], "qCount": 17}], "trainQ": 35}, {"id": 15, "name": "المكسب والخسارة والسعر الأصلي", "trainPages": [165, 166, 167, 168], "tests": [{"name": "اختبار ١ على المكسب والخسارة", "pages": [169, 170], "qCount": 16}, {"name": "اختبار ٢ على المكسب والخسارة", "pages": [171, 172, 173], "qCount": 13}], "trainQ": 27}, {"id": 16, "name": "التناسب الطردي والعكسي", "trainPages": [174, 175, 176, 177, 178], "tests": [{"name": "اختبار ١ على التناسب", "pages": [179, 180, 181], "qCount": 19}], "trainQ": 31}, {"id": 17, "name": "الوسط الحسابي", "trainPages": [182, 183, 184, 185, 186, 187], "tests": [], "trainQ": 36}, {"id": 19, "name": "المثلث", "trainPages": [235, 236, 237, 238, 239], "tests": [], "trainQ": 10}, {"id": 20, "name": "المستطيل", "trainPages": [269, 270, 271, 272, 273, 274, 275, 276], "tests": [{"name": "اختبار ١ على المستطيل", "pages": [277, 278, 280, 281, 282], "qCount": 13}], "trainQ": 21}, {"id": 21, "name": "المربع", "trainPages": [283, 284, 285, 286, 287, 288, 289, 290, 291, 294, 295, 296, 297, 298], "tests": [], "trainQ": 31}, {"id": 22, "name": "المعين والمتوازي وشبه المنحرف", "trainPages": [299, 300, 301, 302, 303, 304], "tests": [], "trainQ": 10}, {"id": 23, "name": "المساحات المظللة", "trainPages": [305, 307, 308, 309, 310], "tests": [], "trainQ": 7}, {"id": 25, "name": "التوازي", "trainPages": [347, 348, 349, 350, 351, 352, 353, 354, 355], "tests": [{"name": "اختبار ١ على التوازي", "pages": [356, 357, 358, 360, 361, 362], "qCount": 8}], "trainQ": 11}, {"id": 26, "name": "الأشكال ثلاثية الأبعاد", "trainPages": [363, 364, 365, 366, 367], "tests": [{"name": "اختبار ١ على ثلاثيات الأبعاد", "pages": [368, 369, 370, 371], "qCount": 16}], "trainQ": 21}], "totals": {"train": 240, "test": 121, "supported": 361}};
-const OFFLINE_PAGES=[151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 235, 236, 237, 238, 239, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 307, 308, 309, 310, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371];const MANIFEST_VER="6b84acb5";
+const OFFLINE_PAGES=[151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 235, 236, 237, 238, 239, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 307, 308, 309, 310, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371];const MANIFEST_VER="482c0f49";
 async function downloadOffline(){
   const btn=$('#dlbtn');if(btn)btn.disabled=true;
   const st=$('#dlstat');
