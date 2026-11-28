@@ -48,7 +48,14 @@ h2.sec{color:#fff;font-size:20px;margin:22px 0 10px}
 .qcard{background:var(--card);border-radius:16px;padding:16px;margin-top:12px}
 .qnum{color:var(--gold);font-weight:700;font-size:14px}
 .qimg{margin:10px 0;background:#fff;border-radius:8px;overflow:hidden;text-align:center}
-.qimg img{width:100%;height:auto;display:block}
+.qimg img{width:100%;height:auto;display:block;cursor:zoom-in}
+.zoomhint{font-size:11px;color:#6b7c8a;padding:3px 0 5px}
+#zoomer{position:fixed;inset:0;background:rgba(5,10,18,.97);z-index:999;display:none;flex-direction:column}
+#zoomer.open{display:flex}
+#zoombar{display:flex;gap:10px;justify-content:center;padding:10px}
+#zoombar button{background:#16283d;color:#fff;border:1px solid var(--gold);border-radius:8px;padding:7px 16px;font-size:16px;font-family:inherit;cursor:pointer}
+#zoomview{flex:1;overflow:auto;padding:8px;-webkit-overflow-scrolling:touch}
+#zoomimg{display:block;margin:0 auto;background:#fff;border-radius:6px}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
 .opt{background:var(--paper);border:2px solid #cbb26a;border-radius:12px;padding:14px;font-size:20px;font-weight:700;color:var(--navy);cursor:pointer}
 .opt.sel{background:var(--gold2);border-color:var(--navy)}
@@ -94,6 +101,38 @@ const $=s=>document.querySelector(s);
 const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const letters=['أ','ب','ج','د'];
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* Zoom overlay */
+let zoomScale=1;
+function zoomImg(src){const o=$('#zoomer'),im=$('#zoomimg');im.src=src;zoomScale=1;im.style.width='100%';o.classList.add('open');document.body.style.overflow='hidden';}
+function zoomMult(f){const im=$('#zoomimg');zoomScale=Math.min(4,Math.max(.5,zoomScale*f));im.style.width=((im.naturalWidth||800)*zoomScale)+'px';}
+function closeZoom(){$('#zoomer').classList.remove('open');document.body.style.overflow='';}
+/* Arabic math explanation formatting (Ahmed's typesetting rules) */
+const SHOWN_REASONS=new Set(["p108-q07", "p060-q04", "p016-q01", "p016-q03", "p016-q05", "p137-q04", "p137-q05", "p137-q06", "p069-q01", "p069-q02", "p069-q03", "p069-q04", "p069-q08", "p149-q01", "p149-q02", "p149-q03", "p149-q04", "p149-q05", "p149-q07", "p280-q01", "p365-q04", "p365-q06", "p109-q06", "p120-q02", "p120-q05", "p104-q02", "p104-q05", "p104-q06", "p104-q07", "p086-q01", "p086-q02", "p086-q03", "p094-q01", "p094-q02", "p094-q03", "p094-q04", "p094-q05", "p094-q06", "p094-q07", "p033-q01", "p033-q02", "p028-q03", "p028-q06", "p135-q01", "p135-q02", "p135-q03", "p018-q01", "p018-q04", "p018-q08", "p141-q01", "p141-q02", "p141-q03", "p141-q04", "p141-q05", "p140-q01", "p140-q03", "p140-q04", "p140-q05", "p058-q06", "p058-q07", "p070-q01", "p070-q03", "p070-q04", "p070-q05", "p070-q06", "p070-q09", "p283-q05", "p113-q01", "p113-q02", "p035-q06", "p017-q01", "p017-q02", "p017-q03", "p017-q04", "p017-q06", "p017-q07", "p017-q08", "p074-q04", "p074-q07", "p074-q08", "p326-q03", "p053-q08", "p053-q09", "p150-q02", "p118-q06", "p118-q07", "p277-q03", "p090-q01", "p090-q07", "p142-q02", "p142-q03", "p142-q04", "p142-q06", "p368-q03", "p122-q01", "p122-q03", "p122-q04", "p122-q05", "p122-q08", "p122-q09", "p122-q10", "p138-q02", "p138-q03", "p138-q04", "p138-q05", "p138-q06", "p129-q01", "p129-q03", "p129-q04", "p129-q05", "p129-q06", "p059-q04", "p059-q06", "p079-q02", "p062-q03", "p062-q05", "p022-q01", "p011-q04", "p115-q04", "p115-q06", "p001-q01", "p001-q02", "p001-q03", "p001-q05", "p001-q06", "p001-q07", "p001-q08", "p125-q02", "p125-q03", "p125-q06", "p125-q07", "p125-q08", "p125-q09", "p110-q02", "p110-q03", "p110-q05", "p021-q04", "p021-q05", "p021-q09", "p350-q02", "p139-q01", "p139-q02", "p139-q03", "p093-q02", "p093-q04", "p093-q05", "p093-q06", "p093-q07", "p066-q06", "p124-q01", "p124-q02", "p124-q04", "p124-q07", "p100-q01", "p100-q04", "p098-q01", "p098-q04", "p098-q05", "p032-q06", "p032-q07", "p032-q08", "p146-q01", "p146-q04", "p146-q05", "p146-q06", "p294-q02", "p107-q06", "p134-q01", "p134-q02", "p134-q03", "p134-q05", "p134-q06", "p029-q04", "p029-q06", "p005-q03", "p005-q07", "p005-q09", "p040-q07", "p071-q01", "p071-q03", "p071-q04", "p071-q05", "p071-q06", "p071-q07", "p087-q01", "p087-q02", "p087-q03", "p087-q05", "p087-q06", "p036-q01", "p036-q06", "p080-q02", "p080-q03", "p080-q04", "p080-q07", "p080-q08", "p143-q01", "p143-q02", "p143-q03", "p143-q04", "p143-q05", "p143-q06", "p041-q02", "p041-q03", "p057-q04", "p057-q06", "p057-q08", "p321-q01", "p331-q02", "p313-q03", "p097-q04", "p052-q03", "p112-q07", "p096-q05", "p010-q01", "p010-q02", "p010-q04", "p131-q02", "p131-q06", "p131-q08", "p148-q02", "p148-q03", "p148-q04", "p148-q05", "p133-q02", "p133-q03", "p133-q04", "p133-q05", "p133-q07", "p072-q01", "p072-q04", "p072-q05", "p072-q06", "p072-q08", "p123-q02", "p123-q03", "p123-q05", "p123-q06", "p123-q08", "p123-q09", "p287-q01", "p287-q03", "p116-q03", "p077-q01", "p077-q02", "p077-q03", "p077-q04", "p102-q01", "p102-q03", "p037-q02", "p037-q03", "p002-q01", "p002-q02", "p002-q03", "p002-q04", "p002-q05", "p002-q07", "p002-q09", "p065-q04", "p081-q01", "p081-q03", "p081-q04", "p081-q05", "p081-q06", "p081-q07", "p101-q01", "p301-q02", "p147-q01", "p147-q02", "p147-q04", "p147-q05", "p147-q06", "p043-q03", "p008-q01", "p008-q03", "p128-q01", "p128-q02", "p128-q04", "p128-q05", "p128-q07", "p073-q01", "p073-q02", "p073-q04", "p073-q07", "p073-q08", "p092-q01", "p092-q02", "p064-q01", "p064-q02", "p064-q05", "p064-q06", "p064-q07", "p064-q08", "p327-q01", "p003-q02", "p003-q04", "p003-q05", "p003-q06", "p003-q07", "p003-q08", "p356-q01", "p127-q01", "p127-q02", "p127-q03", "p127-q04", "p127-q05", "p127-q06", "p127-q07", "p127-q08", "p015-q04", "p015-q05", "p015-q08", "p121-q04", "p121-q07", "p119-q01", "p119-q03", "p119-q04", "p119-q05", "p119-q06", "p119-q07", "p067-q01", "p067-q03", "p007-q02", "p007-q04", "p007-q07", "p007-q09", "p136-q01", "p136-q05", "p136-q06", "p136-q07", "p056-q05", "p084-q02", "p084-q05", "p105-q01", "p105-q02", "p105-q03", "p045-q01", "p045-q02", "p145-q01", "p145-q02", "p145-q03", "p145-q04", "p055-q02", "p055-q06", "p083-q01", "p023-q01", "p023-q02", "p023-q03", "p023-q04", "p023-q05", "p088-q02", "p088-q03", "p088-q04", "p088-q05", "p075-q01", "p075-q02", "p075-q07", "p078-q02", "p078-q04", "p078-q05", "p078-q06", "p114-q04", "p114-q05", "p114-q06", "p004-q01", "p004-q02", "p004-q04", "p004-q05", "p004-q07", "p004-q09", "p006-q01", "p006-q02", "p006-q06", "p085-q02", "p085-q03", "p085-q04", "p085-q05", "p085-q06", "p317-q03", "p318-q02", "p046-q02", "p046-q07", "p019-q04", "p144-q04", "p144-q05", "p144-q06", "p126-q01", "p126-q02", "p126-q03", "p126-q04", "p126-q05", "p091-q06", "p091-q07", "p369-q06", "p099-q03", "p099-q04", "p099-q05", "p099-q06", "p054-q01", "p054-q02", "p054-q04", "p054-q05", "p054-q07", "p103-q01", "p095-q01", "p095-q03", "p095-q05", "p095-q06", "p009-q01", "p009-q07", "p030-q04", "p030-q05", "p349-q02", "p132-q02", "p132-q03", "p132-q05", "p111-q01", "p111-q02", "p111-q03", "p111-q05", "p026-q04", "p106-q08", "p358-q02", "p117-q01", "p117-q04", "p117-q05", "p284-q04", "p310-q01", "p082-q01", "p082-q03", "p082-q04", "p082-q06", "p082-q07", "p308-q02", "p024-q04", "p024-q05", "p024-q06", "p076-q01", "p076-q06", "p076-q07"]);
+const REASON_OV={"p130-q06": "الإشارة السالبة خارج الأس فيكون الناتج سالبًا<br>سالب ١٥٦٢٥ أصغر من سالب ١٢٥", "p365-q05": "٣٤٣ &gt; ١٩٦", "p058-q01": "باقي قسمة ١٣٥ على ٩ = ٠<br>وباقي قسمته على ٤ = ٣", "p058-q05": "باقي قسمة ٤٩ على ٩ = ٤", "p070-q02": "٤٫٩٩ − ٠٫٤٩٥ = ٤٫٤٩٥<br>وهو الخيار ج", "p074-q01": "٤٤ ÷ ١٠ = ٤٫٤", "p074-q02": "٤٤ ÷ ١٠٠ = ٠٫٤٤", "p053-q02": "٤٣٥٦ ÷ ١١ = ٣٩٦<br>أو بخاصية القسمة على ١١: (٦ + ٣) − (٥ + ٤) = ٠", "p053-q03": "٥٣٩٠ ÷ ١١ = ٤٩٠<br>أو: (٠ + ٣) − (٩ + ٥) = سالب ١١ فيقبل القسمة على ١١", "p053-q06": "باقي قسمة ٣٧٣٧ على ١١ = ٨", "p042-q01": "الأيام التالية: ٣ + ٦ + ٩ + ١٢ + ١٥ = ٤٥<br>٥٢ − ٤٥ = ٧", "p039-q01": "باقي قسمة ٨٠ على ٧ = ٣<br>أي ٣ أيام بعد الأربعاء", "p039-q02": "باقي قسمة ٧٠ على ٧ = ٠", "p039-q03": "باقي قسمة ٤٥ على ٧ = ٣<br>أي ٣ أيام قبل الخميس", "p040-q01": "باقي قسمة ١٠٧ على ٥ = ٢", "p040-q02": "باقي قسمة ٢٢ على ٤ = ٢<br>← ٣² تنتهي بالرقم ٩", "p065-q05": "٥٥٥ = ٢٢٢ + ٣٣٣<br>مع حد ضرب موجب بينهما", "p073-q09": "٠٫١ ÷ ١٠ = ٠٫٠١", "p073-q10": "٠٫١ ÷ ١٠٠ = ٠٫٠٠١", "p025-q04": "للتفوق على ٨ و ٨ يلزم ثلاث تسعات<br>٦٢ − ١٦ − ٢٧ = ١٩", "p007-q03": "١٢١ + ١٦٩ = ٢٩٠<br>يطابق ١٢٠ + ١٧٠ = ٢٩٠", "p084-q04": "(١/٤) ÷ (١/٨) = ٢<br>الجزء الداخلي: (١/٨) ÷ (١/٤) × ٨/٤ = ١", "p045-q04": "باقي قسمة ٤٣ على ٤ = ٣", "p045-q05": "باقي قسمة ٩٥ على ٤ = ٣", "p045-q07": "باقي قسمة ٢١ على ٤ = ١", "p055-q01": "باقي قسمة ٣٢ على ١٢ = ٨", "p364-q05": "٨ &gt; ٧٫٥", "p054-q03": "٥١ = ٣ × ١٧<br>وكلا العاملين عدد أولي", "p054-q10": "باقي قسمة ١٢٠ على ٩ = ٣", "p106-q03": "٣√١٢ = ٦√٣<br>وبإضافة ٧√٣ يكون المجموع ١٣√٣", "p310-q02": "المظلل = مثلثان مساحة كلٍّ منهما ١/٨ المربع، أي ١/٤ معًا<br>٣ × ٤ = ١٢", "p076-q03": "١٠٩٫٨٢ × ٩٫٩٨ ÷ ٤٫٠٩٢ ≈ ٢٦٧٫٨<br>وأقرب قيمة هي ٢٦٠"};
+const EXCLUDED_Q=new Set(["p006-q05", "p015-q03", "p076-q02", "p084-q01", "p096-q01", "p105-q04", "p134-q04", "p300-q01", "p315-q02", "p335-q01", "p343-q01", "p369-q02"]);
+function whyBox(q){
+  if(!q.reason)return '';
+  if(REASON_OV[q.id])return `<div class="why"><b>لماذا؟</b><div class="r">${REASON_OV[q.id]}</div></div>`;
+  if(SHOWN_REASONS.has(q.id))return `<div class="why"><b>لماذا؟</b><div class="r">${fmtReason(q.reason)}</div></div>`;
+  return `<div class="why"><b>لماذا؟</b><div class="r">الشرح التفصيلي لهذا السؤال غير متاح حاليًا.</div></div>`;
+}
+const RE_PHRASES=[['right isosceles','قائم متساوي الساقين'],['isosceles','متساوي الساقين'],['right triangle','مثلث قائم'],['right angle','زاوية قائمة'],['place-value','القيمة المكانية'],['place value','القيمة المكانية'],['square root','الجذر التربيعي'],['cube root','الجذر التكعيبي'],['difference of squares','فرق بين مربعين'],['differenceofsquares','فرق بين مربعين'],['perimeter','المحيط'],['circumference','محيط الدائرة']];
+const RE_WORDS={'area':'المساحة','areas':'المساحات','triangle':'مثلث','triangles':'مثلثات','square':'مربع','squares':'مربعات','rectangle':'مستطيل','rectangles':'مستطيلات','circle':'دائرة','circles':'دوائر','semicircle':'نصف دائرة','sector':'قطاع دائري','sectors':'قطاعات','radius':'نصف القطر','diameter':'القطر','chord':'وتر دائرة','arc':'قوس','angle':'زاوية','angles':'زوايا','exterior':'خارجية','interior':'داخلية','acute':'حادة','volume':'الحجم','surface':'المساحة السطحية','cylinder':'أسطوانة','pyramid':'هرم','cube':'مكعب','cubes':'مكعبات','shaded':'المظلل','unshaded':'غير المظلل','positive':'موجب','negative':'سالب','nonnegative':'غير سالب','even':'زوجي','odd':'فردي','half':'نصف','quarter':'ربع','third':'الثلث','double':'الضعف','twice':'مرتين','equal':'يساوي','equals':'يساوي','equality':'تساوي','gives':'يعطي','yield':'ينتج','yields':'ينتج','minus':'ناقص','plus':'زائد','sum':'المجموع','sums':'المجاميع','difference':'الفرق','differences':'فروق','product':'حاصل الضرب','products':'حواصل الضرب','quotient':'حاصل القسمة','factor':'عامل','factors':'عوامل','multiple':'مضاعف','multiples':'مضاعفات','divisible':'يقبل القسمة على','divides':'يقسم','divided':'مقسوم','first':'الأول','original':'الأصلي','option':'الخيار','options':'الخيارات','choice':'الاختيار','choices':'الاختيارات','hypotenuse':'الوتر','leg':'الساق','legs':'الساقان','diagonal':'القطر','diagonals':'الأقطار','denominator':'المقام','denominators':'المقامات','numerator':'البسط','numerators':'البسط','exponent':'الأس','exponents':'الأسس','power':'القوة','powers':'القوى','root':'الجذر','roots':'الجذور','total':'المجموع الكلي','base':'القاعدة','bases':'القواعد','height':'الارتفاع','heights':'ارتفاعات','width':'العرض','length':'الطول','larger':'أكبر','smaller':'أصغر','largest':'الأكبر','whole':'العدد الكلي','numbers':'أعداد','number':'عدد','integers':'الأعداد الصحيحة','integer':'عدد صحيح','digit':'رقم','digits':'أرقام','fraction':'كسر','fractions':'كسور','decimal':'عشري','clockwise':'مع عقارب الساعة','grid':'الشبكة','row':'صف','rows':'صفوف','column':'عمود','columns':'أعمدة','upper':'العلوية','lower':'السفلية','top':'الأعلى','bottom':'الأسفل','middle':'الأوسط','left':'اليسار','value':'القيمة','values':'القيم','result':'الناتج','answer':'الإجابة','solution':'الحل','arithmetic':'حساب مباشر','approximate':'تقريبي','approximately':'تقريبًا','expression':'المقدار','expressions':'المقادير','direct':'مباشر','source':'المصدر','fragment':'جزء','differs':'يختلف','grouping':'التجميع','radical':'الجذر','radicals':'الجذور','ways':'طرق','exactly':'بالضبط','piece':'قطعة','pieces':'قطع','cuts':'قصّات','minutes':'دقائق','hours':'ساعات','hour':'ساعة','tiles':'بلاطات','empty':'الفارغ','order':'الترتيب','ordered':'مرتب','rule':'القاعدة','identity':'متطابقة','expansion':'النشر','simplify':'بالتبسيط','substitution':'بالتعويض','eliminates':'يحذف','cancel':'يختصر','cancelling':'بالاختصار','slope':'الميل','slopes':'الميول','parallel':'متوازيان','parallels':'متوازيات','ratio':'النسبة','proportional':'متناسب','mean':'المتوسط','median':'الوسيط','count':'العدد','positions':'المواضع','primes':'أعداد أولية','prime':'أولي','consecutive':'متتالية','distinct':'مختلفة','remaining':'المتبقي','equation':'المعادلة','equations':'المعادلات','function':'الدالة','point':'نقطة','points':'نقاط','line':'مستقيم','lines':'مستقيمات','vertex':'الرأس','vertices':'الرؤوس','side':'الضلع','sides':'الأضلاع','shape':'الشكل','shapes':'الأشكال','figure':'الشكل','speed':'السرعة','distance':'المسافة','time':'الزمن','average':'المتوسط','increments':'بزيادة','decreases':'يتناقص','increases':'يتزايد'};
+function fmtReason(r){
+  if(!r)return '';
+  const raw=String(r).trim();
+  return raw.split(/;\s*/).map(step=>{
+    let t=esc(step);
+    for(const[a,b]of RE_PHRASES)t=t.replace(new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),b);
+    t=t.replace(/\bsqrt\s*\(([^)]*)\)/g,'√($1)');
+    t=t.replace(/\bsqrt\s*(\d+(?:\.\d+)?)/g,'√$1');
+    t=t.replace(/-&gt;/g,' ← ');
+    t=t.replace(/\*/g,'×').replace(/\^2/g,'²').replace(/\^3/g,'³');
+    t=t.replace(/[a-zA-Z]{2,}/g,w=>RE_WORDS[w.toLowerCase()]||w);
+    t=t.replace(/\d+(\.\d+)?/g,m=>ar(m).replace(/\./g,'٫'));
+    return t;
+  }).join('<br>');
+}
 const SUPPORTED=['multiple_choice','number','ratio','percentage','symbolic','choice_set'];
 let TOPICS=null;
 const pageCache={};
@@ -102,7 +141,7 @@ async function loadPage(n){
   const r=await fetch('../pages/'+n+'.json');
   if(!r.ok)throw new Error('page');
   const d=await r.json();
-  d.questions=d.questions.filter(q=>SUPPORTED.includes(q.type));
+  d.questions=d.questions.filter(q=>SUPPORTED.includes(q.type)&&!EXCLUDED_Q.has(q.id));
   pageCache[n]=d;return d;
 }
 async function collect(pages){
@@ -190,7 +229,7 @@ function home(){
   </div>
   <div class="install"><b>ثبّت التطبيق على جوالك:</b><br>أندرويد: افتح الرابط في Chrome ثم ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br>آيفون: افتح الرابط في Safari ثم زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».</div>
   <div class="note">تقدّمك ونتائجك محفوظة على جهازك فقط، بلا حساب ولا تسجيل دخول.</div>
-  <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل — للتواصل: 0575978083</div>`;
+  <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل</div>`;
 }
 function lessonList(kind){ // kind: 'tests' | 'train'
   BACK=kind==='tests'?'#tests':'#train';
@@ -297,7 +336,7 @@ function renderQ(){
   if(checked){
     const ok=grade(q,a);
     fb=`<div class="feedback ${ok?'ok':'bad'}"><b>${ok?'إجابة صحيحة ✅':'إجابة غير صحيحة ❌'}</b> — الإجابة الصحيحة: <b>${esc(correctText(q))}</b></div>`;
-    if(q.reason)fb+=`<div class="why"><b>لماذا؟</b><div class="r">${esc(q.reason)}</div></div>`;
+    if(q.reason)fb+=whyBox(q);
     else if(q.answerDisplay!=null&&q.type!=='multiple_choice')fb+=`<div class="why"><b>الناتج:</b> ${esc(q.answerDisplay)}</div>`;
   }
   const trainMode=!SESS.timed;
@@ -305,7 +344,7 @@ function renderQ(){
   <div class="prog"><i style="width:${Math.round((i)/n*100)}%"></i></div>
   <div class="qcard">
     <div class="qnum">سؤال ${ar(i+1)} من ${ar(n)} · صفحة ${ar(it.page)} من المذكرة</div>
-    <div class="qimg"><img src="${q.readerImage||q.image}" alt="السؤال"></div>
+    <div class="qimg"><img src="${q.readerImage||q.image}" alt="السؤال" onclick="zoomImg(this.src)"><div class="zoomhint">اضغط على صورة السؤال لتكبيرها 🔍</div></div>
     ${input}
     ${fb}
     <div class="btnrow">
@@ -358,14 +397,14 @@ function finish(){
   const pct=n?score/n:0;
   const msg=pct>=.9?'ممتاز! نتيجة رائعة':pct>=.75?'جيد جدًا، قريب من التمام':pct>=.5?'جيد، راجع أخطاءك وستتحسن':'تحتاج تدريبًا أكثر على هذا الدرس';
   let h=barHTML('النتيجة — '+SESS.title,false);
-  h+=`<div class="card result"><div class="big">${ar(score)} / ${ar(n)}</div><div class="msg">${msg}</div><div style="color:#6b7c8a;margin-top:6px">${ar(Math.round(pct*100))}٪</div>
+  h+=`<div class="card result"><div class="big">أحرزت ${ar(score)} من ${ar(n)}</div><div class="msg">${msg}</div><div style="color:#6b7c8a;margin-top:6px">النسبة: ${ar(Math.round(pct*100))}٪</div>
   <div class="btnrow"><button class="btn gold" onclick="route('#tests')">الاختبارات</button><button class="btn" onclick="route('#wrongs');startWrongs()">راجع أخطاءك</button><button class="btn ghost" onclick="route('#home')">الرئيسية</button></div></div>`;
   h+='<h2 class="sec">مراجعة الأسئلة</h2>';
   for(const r of rows){
     h+=`<div class="card review-item"><div class="st ${r.ok?'ok':'bad'}">${r.ok?'✅':'❌'} سؤال ${ar(r.i+1)} — صفحة ${ar(r.it.page)}</div>
-    <div class="qimg"><img loading="lazy" src="${r.it.q.readerImage||r.it.q.image}"></div>
+    <div class="qimg"><img loading="lazy" src="${r.it.q.readerImage||r.it.q.image}" onclick="zoomImg(this.src)"><div class="zoomhint">اضغط على الصورة للتكبير 🔍</div></div>
     <div class="ans">إجابتك: <b>${esc(respLabel(r.it.q,r.a))}</b> · الصحيح: <b>${esc(correctText(r.it.q))}</b></div>
-    ${r.it.q.reason?`<div class="why"><b>لماذا؟</b><div class="r">${esc(r.it.q.reason)}</div></div>`:''}
+    ${whyBox(r.it.q)}
     </div>`;
   }
   view().innerHTML=h;window.scrollTo(0,0);
@@ -384,7 +423,7 @@ function route(h){
   else if(h==='#train')lessonList('train');
   else if(h==='#wrongs')startWrongs();
 }
-window.addEventListener('hashchange',()=>{if(SESS&&document.getElementById('timer')){stopTick();SESS=null;}route(location.hash||'#home');});
+window.addEventListener('hashchange',()=>{if(!SESS||!$('#timer'))route(location.hash||'#home');});
 const TOPICS_DATA={"lessons": [{"id": 1, "name": "العمليات الحسابية والأعداد الكبيرة", "trainPages": [1, 2, 3, 4, 5], "tests": [{"name": "اختبار الدرس الأول", "pages": [6, 7, 8], "qCount": 20}], "trainQ": 42}, {"id": 2, "name": "قوانين هامة في القدرات", "trainPages": [9, 10, 11, 12, 13, 14, 15, 16], "tests": [{"name": "اختبار الدرس الثاني", "pages": [17, 18, 19, 20], "qCount": 23}], "trainQ": 41}, {"id": 3, "name": "الاحتمالات والإحصاء", "trainPages": [21, 22, 23, 24, 25], "tests": [{"name": "اختبار الدرس الثالث", "pages": [26, 27, 28], "qCount": 18}], "trainQ": 27}, {"id": 4, "name": "أسرع الطرق لحل سؤال القدرات", "trainPages": [29, 30, 31, 32, 33, 34], "tests": [{"name": "اختبار الدرس الرابع", "pages": [35, 36, 37, 38], "qCount": 24}], "trainQ": 40}, {"id": 5, "name": "الدوريات والأنماط", "trainPages": [39, 40, 41, 42, 43, 44], "tests": [{"name": "اختبار الدرس الخامس", "pages": [45, 46, 47, 48, 49], "qCount": 19}], "trainQ": 32}, {"id": 6, "name": "التبسيط والاختصارات والقسمة", "trainPages": [50, 51, 52, 53, 54, 55], "tests": [{"name": "اختبار الدرس السادس", "pages": [56, 57, 58], "qCount": 22}], "trainQ": 48}, {"id": 7, "name": "المعادلات والمربعات الكاملة والفرق بين مربعين", "trainPages": [59, 60, 61, 62, 63], "tests": [{"name": "اختبار الدرس السابع", "pages": [64, 65, 66, 67], "qCount": 28}], "trainQ": 36}, {"id": 8, "name": "المضاعف والقاسم", "trainPages": [68], "tests": [], "trainQ": 6}, {"id": 9, "name": "الأعداد العشرية", "trainPages": [69, 70, 71, 72, 73, 74, 75], "tests": [{"name": "اختبار ١ على الأعداد العشرية", "pages": [76, 77, 78, 79], "qCount": 23}], "trainQ": 57}, {"id": 10, "name": "الكسور", "trainPages": [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94], "tests": [{"name": "اختبار ١ على الكسور", "pages": [95, 96, 97], "qCount": 18}, {"name": "اختبار ٢ على الكسور", "pages": [98, 99, 100, 101], "qCount": 17}], "trainQ": 98}, {"id": 11, "name": "الجذور", "trainPages": [102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112], "tests": [{"name": "اختبار ١ على الجذور", "pages": [113, 114], "qCount": 13}, {"name": "اختبار ٢ على الجذور", "pages": [115, 116, 117], "qCount": 19}], "trainQ": 79}, {"id": 12, "name": "الأسس", "trainPages": [118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133], "tests": [{"name": "اختبار ١ على الأسس", "pages": [134, 135, 136], "qCount": 19}, {"name": "اختبار ٢ على الأسس", "pages": [137, 138, 139], "qCount": 16}], "trainQ": 122}, {"id": 13, "name": "السرعة والمسافة والزمن", "trainPages": [140, 141, 142, 143, 144, 145, 146, 147], "tests": [{"name": "اختبار ١ على السرعات", "pages": [148, 149, 150], "qCount": 13}], "trainQ": 46}, {"id": 14, "name": "النسبة والنسبة المئوية", "trainPages": [151, 152, 153, 154, 155, 156, 157], "tests": [{"name": "اختبار ١ على النسب المئوية", "pages": [158, 159, 160], "qCount": 20}, {"name": "اختبار ٢ على النسب المئوية", "pages": [161, 162, 163, 164], "qCount": 19}], "trainQ": 38}, {"id": 15, "name": "المكسب والخسارة والسعر الأصلي", "trainPages": [165, 166, 167, 168], "tests": [{"name": "اختبار ١ على المكسب والخسارة", "pages": [169, 170], "qCount": 16}, {"name": "اختبار ٢ على المكسب والخسارة", "pages": [171, 172, 173], "qCount": 15}], "trainQ": 27}, {"id": 16, "name": "التناسب الطردي والعكسي", "trainPages": [174, 175, 176, 177, 178], "tests": [{"name": "اختبار ١ على التناسب", "pages": [179, 180, 181], "qCount": 19}], "trainQ": 37}, {"id": 17, "name": "الوسط الحسابي", "trainPages": [182, 183, 184, 185, 186, 187], "tests": [], "trainQ": 38}, {"id": 18, "name": "الزوايا والمثلثات", "trainPages": [188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234], "tests": [], "trainQ": 104}, {"id": 19, "name": "المثلث", "trainPages": [235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261], "tests": [{"name": "اختبار ١ على المثلث", "pages": [262, 263, 264, 265, 266, 267, 268], "qCount": 14}], "trainQ": 60}, {"id": 20, "name": "المستطيل", "trainPages": [269, 270, 271, 272, 273, 274, 275, 276], "tests": [{"name": "اختبار ١ على المستطيل", "pages": [277, 278, 279, 280, 281, 282], "qCount": 15}], "trainQ": 29}, {"id": 21, "name": "المربع", "trainPages": [283, 284, 285, 286, 287, 288, 289, 290, 291, 294, 295, 296, 297, 298], "tests": [], "trainQ": 37}, {"id": 22, "name": "المعين والمتوازي وشبه المنحرف", "trainPages": [299, 300, 301, 302, 303, 304], "tests": [], "trainQ": 12}, {"id": 23, "name": "المساحات المظللة", "trainPages": [305, 306, 307, 308, 309, 310], "tests": [], "trainQ": 14}, {"id": 24, "name": "الدائرة", "trainPages": [312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336], "tests": [{"name": "اختبار ١ على الدائرة", "pages": [337, 338, 339, 340, 341, 342, 343], "qCount": 11}], "trainQ": 66}, {"id": 25, "name": "التوازي", "trainPages": [344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355], "tests": [{"name": "اختبار ١ على التوازي", "pages": [356, 357, 358, 359, 360, 361, 362], "qCount": 12}], "trainQ": 22}, {"id": 26, "name": "الأشكال ثلاثية الأبعاد", "trainPages": [363, 364, 365, 366, 367], "tests": [{"name": "اختبار ١ على ثلاثيات الأبعاد", "pages": [368, 369, 370, 371], "qCount": 16}], "trainQ": 24}], "totals": {"train": 1182, "test": 449, "supported": 1631}};
 async function boot(){
   TOPICS=TOPICS_DATA;
@@ -392,5 +431,9 @@ async function boot(){
 }
 boot().catch(e=>{view().innerHTML='<div class="spin">تعذر تحميل بيانات التطبيق. تحقق من الاتصال ثم حدّث الصفحة.</div>';});
 </script>
+<div id="zoomer">
+  <div id="zoombar"><button onclick="zoomMult(1.6)">＋ تكبير</button><button onclick="zoomMult(0.625)">− تصغير</button><button onclick="closeZoom()">✕ إغلاق</button></div>
+  <div id="zoomview" onclick="if(event.target===this)closeZoom()"><img id="zoomimg" alt="السؤال مكبّر"></div>
+</div>
 </body>
 </html>
