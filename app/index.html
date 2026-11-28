@@ -141,9 +141,16 @@ let TOPICS=null;
 const pageCache={};
 async function loadPage(n){
   if(pageCache[n])return pageCache[n];
-  const r=await fetch('../pages/'+n+'.json');
-  if(!r.ok)throw new Error('page');
-  const d=await r.json();
+  let d;
+  try{
+    const r=await fetch('../pages/'+n+'.json');
+    if(!r.ok)throw new Error('page');
+    d=await r.json();
+  }catch(err){
+    const c=await caches.open('qandil-pages-v1');const hit=await c.match('../pages/'+n+'.json');
+    if(!hit)throw err;
+    d=await hit.json();
+  }
   d.questions=d.questions.filter(q=>SUPPORTED.includes(q.type)&&!EXCLUDED_Q.has(q.id)&&HAS_SOLUTION(q));
   pageCache[n]=d;return d;
 }
@@ -232,6 +239,7 @@ function home(){
   const W=store.get().wrongs||{};const wrongs=Object.keys(W).filter(k=>!normW(W[k]).corrected).length;
   const resumed=store.get().session;
   view().innerHTML=header()+`
+  <div class="note" style="background:#fff3d6;color:#6b4e00;border:1px solid #e0b84d;border-radius:10px;padding:8px;margin:8px 0">نسخة تجريبية قيد المراجعة: الأسئلة والحلول لم تُراجع بالكامل بعد.</div>
   <div class="stats">
     <span class="chip"><b>${ar(t.supported)}</b> سؤالًا</span>
     <span class="chip"><b>${ar(TOPICS.lessons.reduce((n,L)=>n+L.tests.length,0))}</b> اختبار درس</span>
@@ -244,6 +252,7 @@ function home(){
     <button class="mbtn" onclick="startMock()"><span class="ic">⏱️</span><span>اختبار تجريبي شامل<small>${ar(25)} سؤالًا من كل الدروس في ${ar(25)} دقيقة</small></span></button>
     <button class="mbtn" onclick="route('#wrongs')"><span class="ic">🔁</span><span>مراجعة أخطائي<small>${wrongs?ar(wrongs)+' سؤالًا تحتاج مراجعة':'أخطاؤك السابقة تتجمع هنا للتدريب عليها'}</small></span></button>
   </div>
+  <div class="install" id="offlinebox"><b>العمل بلا إنترنت (تجريبي):</b> <button class="btn gold" id="dlbtn" onclick="downloadOffline()">حمّل الأسئلة على جهازك</button> <span id="dlstat" style="font-size:13px;color:#6b7c8a">${store.get().offline?'محمّلة سابقًا ✓':'يلزم اتصال مرة واحدة'}</span></div>
   <div class="install"><b>ثبّت التطبيق على جوالك:</b><br>أندرويد: افتح الرابط في Chrome ثم ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br>آيفون: افتح الرابط في Safari ثم زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».</div>
   <div class="note">تقدّمك ونتائجك محفوظة على جهازك فقط، بلا حساب ولا تسجيل دخول.</div>
   <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل · للتواصل: 0575978083</div>`;
@@ -442,22 +451,25 @@ function route(h){
 }
 window.addEventListener('hashchange',()=>{if(!SESS||!$('#timer'))route(location.hash||'#home');});
 const TOPICS_DATA={"lessons": [{"id": 1, "name": "العمليات الحسابية والأعداد الكبيرة", "trainPages": [1, 2, 3, 4, 5], "tests": [{"name": "اختبار الدرس الأول", "pages": [6, 7, 8], "qCount": 10}], "trainQ": 29}, {"id": 2, "name": "قوانين هامة في القدرات", "trainPages": [9, 10, 11, 12, 13, 14, 15, 16], "tests": [{"name": "اختبار الدرس الثاني", "pages": [17, 18, 19, 20], "qCount": 11}], "trainQ": 12}, {"id": 3, "name": "الاحتمالات والإحصاء", "trainPages": [21, 22, 23, 24, 25], "tests": [{"name": "اختبار الدرس الثالث", "pages": [26, 27, 28], "qCount": 3}], "trainQ": 11}, {"id": 4, "name": "أسرع الطرق لحل سؤال القدرات", "trainPages": [29, 30, 31, 32, 33, 34], "tests": [{"name": "اختبار الدرس الرابع", "pages": [35, 36, 37, 38], "qCount": 5}], "trainQ": 9}, {"id": 5, "name": "الدوريات والأنماط", "trainPages": [39, 40, 41, 42, 43, 44], "tests": [{"name": "اختبار الدرس الخامس", "pages": [45, 46, 47, 48, 49], "qCount": 6}], "trainQ": 10}, {"id": 6, "name": "التبسيط والاختصارات والقسمة", "trainPages": [50, 51, 52, 53, 54, 55], "tests": [{"name": "اختبار الدرس السادس", "pages": [56, 57, 58], "qCount": 8}], "trainQ": 11}, {"id": 7, "name": "المعادلات والمربعات الكاملة والفرق بين مربعين", "trainPages": [59, 60, 61, 62, 63], "tests": [{"name": "اختبار الدرس السابع", "pages": [64, 65, 66, 67], "qCount": 11}], "trainQ": 5}, {"id": 9, "name": "الأعداد العشرية", "trainPages": [69, 70, 71, 72, 73, 74, 75], "tests": [{"name": "اختبار ١ على الأعداد العشرية", "pages": [76, 77, 78, 79], "qCount": 13}], "trainQ": 38}, {"id": 10, "name": "الكسور", "trainPages": [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94], "tests": [{"name": "اختبار ١ على الكسور", "pages": [95, 96, 97], "qCount": 6}, {"name": "اختبار ٢ على الكسور", "pages": [98, 99, 100, 101], "qCount": 10}], "trainQ": 55}, {"id": 11, "name": "الجذور", "trainPages": [102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112], "tests": [{"name": "اختبار ١ على الجذور", "pages": [113, 114], "qCount": 5}, {"name": "اختبار ٢ على الجذور", "pages": [115, 116, 117], "qCount": 6}], "trainQ": 23}, {"id": 12, "name": "الأسس", "trainPages": [118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133], "tests": [{"name": "اختبار ١ على الأسس", "pages": [134, 135, 136], "qCount": 12}, {"name": "اختبار ٢ على الأسس", "pages": [137, 138, 139], "qCount": 11}], "trainQ": 70}, {"id": 13, "name": "السرعة والمسافة والزمن", "trainPages": [140, 141, 142, 143, 144, 145, 146, 147], "tests": [{"name": "اختبار ١ على السرعات", "pages": [148, 149, 150], "qCount": 11}], "trainQ": 35}, {"id": 20, "name": "المستطيل", "trainPages": [269, 270, 271, 272, 273, 274, 275, 276], "tests": [{"name": "اختبار ١ على المستطيل", "pages": [277, 278, 279, 280, 281, 282], "qCount": 2}], "trainQ": 0}, {"id": 21, "name": "المربع", "trainPages": [283, 284, 285, 286, 287, 288, 289, 290, 291, 294, 295, 296, 297, 298], "tests": [], "trainQ": 5}, {"id": 22, "name": "المعين والمتوازي وشبه المنحرف", "trainPages": [299, 300, 301, 302, 303, 304], "tests": [], "trainQ": 1}, {"id": 23, "name": "المساحات المظللة", "trainPages": [305, 306, 307, 308, 309, 310], "tests": [], "trainQ": 3}, {"id": 24, "name": "الدائرة", "trainPages": [312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336], "tests": [], "trainQ": 7}, {"id": 25, "name": "التوازي", "trainPages": [344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355], "tests": [{"name": "اختبار ١ على التوازي", "pages": [356, 357, 358, 359, 360, 361, 362], "qCount": 2}], "trainQ": 2}, {"id": 26, "name": "الأشكال ثلاثية الأبعاد", "trainPages": [363, 364, 365, 366, 367], "tests": [{"name": "اختبار ١ على ثلاثيات الأبعاد", "pages": [368, 369, 370, 371], "qCount": 2}], "trainQ": 4}], "totals": {"train": 330, "test": 134, "supported": 464}};
+const OFFLINE_PAGES=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 28, 29, 30, 32, 33, 35, 36, 37, 39, 40, 41, 42, 43, 45, 46, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 64, 65, 66, 67, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 277, 280, 283, 284, 287, 294, 301, 308, 310, 313, 317, 318, 321, 326, 327, 331, 349, 350, 356, 358, 364, 365, 368, 369];
 async function downloadOffline(){
   const btn=$('#dlbtn');if(btn)btn.disabled=true;
   const st=$('#dlstat');
-  const pages=new Set();
-  TOPICS.lessons.forEach(L=>{L.trainPages.forEach(p=>pages.add(p));L.tests.forEach(t=>t.pages.forEach(p=>pages.add(p)));});
-  const list=[...pages].sort((a,b)=>a-b);let done=0;
-  for(const n of list){
-    try{await loadPage(n);}catch(e){}
-    done++;if(st)st.textContent='جارٍ تحميل الأسئلة… '+ar(done)+' من '+ar(list.length);
+  if(!('caches' in window)||!('serviceWorker' in navigator)){if(st)st.textContent='متصفحك لا يدعم العمل بلا إنترنت.';if(btn)btn.disabled=false;return;}
+  const c=await caches.open('qandil-pages-v1');
+  let done=0,fail=0;
+  for(const n of OFFLINE_PAGES){
+    try{const u='../pages/'+n+'.json';const r=await fetch(u);if(!r.ok)throw 0;await c.put(u,r);}catch(e){fail++;}
+    done++;if(st)st.textContent='جارٍ تحميل الأسئلة… '+ar(done)+' من '+ar(OFFLINE_PAGES.length);
   }
-  store.patch(o=>{o.offline={at:Date.now(),pages:list.length};});
-  if(st)st.textContent='تم ✓ يعمل التطبيق الآن بلا إنترنت ('+ar(done)+' صفحة محفوظة على جهازك)';
-  if(btn){btn.disabled=false;btn.textContent='الأسئلة محمّلة ✓ (اضغط للتحديث)';}
+  const ready=!fail;
+  store.patch(o=>{o.offline=ready?{at:Date.now(),pages:OFFLINE_PAGES.length}:null;});
+  if(st)st.textContent=ready?'تم ✓ تم حفظ كل الأسئلة على جهازك (تجريبي، قيد الاختبار)':'تعذر تحميل '+ar(fail)+' صفحة، حاول مرة أخرى بإنترنت أقوى';
+  if(btn){btn.disabled=false;}
 }
 async function boot(){
   TOPICS=TOPICS_DATA;
+  if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js');}catch(e){}}
   route(location.hash||'#home');
 }
 boot().catch(e=>{view().innerHTML='<div class="spin">تعذر تحميل بيانات التطبيق. تحقق من الاتصال ثم حدّث الصفحة.</div>';});
