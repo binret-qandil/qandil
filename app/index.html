@@ -75,7 +75,7 @@ h2.sec{color:#fff;font-size:20px;margin:22px 0 10px}
 .feedback.bad{background:#f6dcda;border:1.5px solid var(--bad)}
 .why{background:var(--paper);border:1.5px dashed var(--gold);border-radius:12px;padding:12px;margin-top:10px;font-size:15px}
 .why b{color:var(--navy)}
-.why .steps{list-style-type:arabic-indic;direction:rtl;margin:8px 0 0;padding-right:22px;padding-left:0;line-height:1.9;overflow-wrap:anywhere}.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.2;margin:0 3px}.fr .n{border-bottom:1px solid #000;padding:0 3px}.ex{font-size:.65em;position:relative;top:-.7em;margin:0 1px 0 2px}.mix{display:inline-flex;direction:ltr;align-items:center;gap:2px;margin:0 3px}.rad{margin:0 4px;display:inline-flex;align-items:flex-end;direction:rtl}.sg{display:inline-block;transform:scaleX(-1);font-size:1.15em}.vn{border-top:1.5px solid #000;padding:0 3px;margin-right:-2px}
+.why .steps{list-style-type:arabic-indic;direction:rtl;margin:8px 0 0;padding-right:22px;padding-left:0;line-height:1.9;overflow-wrap:anywhere}.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.2;margin:0 3px}.fr .n{border-bottom:1px solid #000;padding:0 3px}.ex{font-size:.65em;position:relative;top:-.7em;margin:0 1px 0 2px}.mix{display:inline-flex;direction:ltr;align-items:center;gap:2px;margin:0 3px}.rad{margin:0 4px;display:inline-flex;align-items:stretch;direction:rtl;vertical-align:middle}.sg{flex:none;width:.7em;min-height:1.2em;overflow:visible;margin-left:-1px}.vn{border-top:1.6px solid currentColor;padding:.12em 3px 0;margin-right:-1px;direction:rtl;display:inline-flex;align-items:center;gap:.25em}
 .why .steps li{margin-bottom:4px}
 .why .r{direction:rtl;margin-top:6px;line-height:1.9}
 .prog{height:8px;background:#dfe6ec;border-radius:6px;overflow:hidden;margin-top:10px}
@@ -223,10 +223,18 @@ const COMP_TXT=["القيمة الأولى أكبر","القيمة الثاني�
 const HAS_SOLUTION=q=>!!STEP_SOL[q.id];
 function stepHTML(t){
   t=esc(t);
-  t=t.replace(/\{\^([^}]*)\}/g,'<span class="ex">$1</span>');
-  t=t.replace(/\{sqrt:([^}]*)\}/g,'<span class="rad"><span class="sg">√</span><span class="vn">$1</span></span>');
-  t=t.replace(/\{mix:([^|}]*)\|([^|}]*)\|([^}]*)\}/g,'<span class="mix"><span class="w">$1</span><span class="fr"><span class="n">$2</span><span class="d">$3</span></span></span>');
-  t=t.replace(/\{frac:([^|}]*)\|([^}]*)\}/g,'<span class="fr"><span class="n">$1</span><span class="d">$2</span></span>');
+  /* exponent written before its base: attach it after the base so RTL shows it at the upper left */
+  t=t.replace(/(^|[\s(،{|=+−×÷:])\{\^([^{}]*)\}(\([^(){}]*\)|\{[a-z]+:[^{}]*\}|[^\s+\-−×÷=<>(){}،,:|]+)/g,(m,a,e,b)=>a+b+'{^'+e+'}');
+  const SG='<svg class="sg" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M10 14 L8 12 L5 19.2 L0.4 0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter" vector-effect="non-scaling-stroke"/></svg>';
+  const re=/\{(\^|sqrt:|frac:|mix:)([^{}]*)\}/;
+  for(let k=0;k<12&&re.test(t);k++){
+    t=t.replace(new RegExp(re.source,'g'),(m,kind,a)=>{
+      if(kind==='^')return '<span class="ex">'+a+'</span>';
+      if(kind==='sqrt:')return '<span class="rad">'+SG+'<span class="vn">'+a+'</span></span>';
+      if(kind==='frac:'){const q=a.split('|');return '<span class="fr"><span class="n">'+q[0]+'</span><span class="d">'+(q[1]||'')+'</span></span>';}
+      const q=a.split('|');return '<span class="mix"><span class="w">'+q[0]+'</span><span class="fr"><span class="n">'+(q[1]||'')+'</span><span class="d">'+(q[2]||'')+'</span></span></span>';
+    });
+  }
   return t.replace(/\{deg\}/g,'<span class="ex">○</span>');
 }
 function whyBox(q){
