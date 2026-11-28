@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>القنديل للكمي</title>
+<meta name="theme-color" content="#0E2A47">
+<link rel="manifest" href='data:application/manifest+json,{\%22name\%22: \%22\u0627\u0644\u0642\u0646\u062f\u064a\u0644 \u0644\u0644\u0643\u0645\u064a\%22, \%22short_name\%22: \%22\u0627\u0644\u0642\u0646\u062f\u064a\u0644\%22, \%22lang\%22: \%22ar\%22, \%22dir\%22: \%22rtl\%22, \%22start_url\%22: \%22.\%22, \%22display\%22: \%22standalone\%22, \%22background_color\%22: \%22%230E2A47\%22, \%22theme_color\%22: \%22%230E2A47\%22}'>
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{--navy:#0E2A47;--navy2:#123C63;--gold:#D8A331;--gold2:#F2C14E;--paper:#F7F3E8;--ink:#1B2A38;--ok:#1E7D46;--bad:#B3362B;--card:#FFFFFF}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--navy);color:var(--ink);min-height:100vh}
+button{font-family:inherit}
+#app{max-width:760px;margin:0 auto;padding:0 14px 90px}
+.hero{text-align:center;padding:26px 10px 18px;color:#fff}
+.hero img.logo{width:92px;height:92px;border-radius:50%;border:3px solid var(--gold);background:var(--navy2)}
+.hero h1{margin:10px 0 2px;font-size:30px;color:var(--gold2);letter-spacing:.5px}
+.hero .sub{color:#cfe0f0;font-size:15px;margin:2px 0}
+.hero .by{color:#9fb8cf;font-size:13px;margin-top:6px}
+.stats{display:flex;gap:8px;justify-content:center;margin:14px 0 4px;flex-wrap:wrap}
+.stats .chip{background:var(--navy2);color:#fff;border:1px solid #2a4f77;border-radius:14px;padding:8px 14px;font-size:14px}
+.stats .chip b{color:var(--gold2)}
+.menu{display:grid;gap:12px;margin-top:18px}
+.mbtn{display:flex;align-items:center;gap:12px;background:var(--card);border:none;border-radius:16px;padding:16px;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;text-align:right;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.mbtn .ic{font-size:26px}
+.mbtn small{display:block;font-weight:400;color:#5a6b7a;font-size:13px;margin-top:3px}
+.mbtn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3d2c05}
+h2.sec{color:#fff;font-size:20px;margin:22px 0 10px}
+.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.lesson-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.lesson-head .t{font-weight:700;color:var(--navy);font-size:16px}
+.lesson-head .n{color:#6b7c8a;font-size:13px}
+.lesson-body{margin-top:10px;display:none}
+.lesson.open .lesson-body{display:block}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{flex:1;min-width:200px;display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1.5px solid var(--gold);border-radius:12px;padding:10px 12px;font-size:15px;font-weight:600;color:var(--navy);cursor:pointer}
+.pill .c{font-weight:400;color:#6b7c8a;font-size:12.5px}
+.pill .best{color:var(--ok);font-size:12.5px;font-weight:700}
+.bar{position:sticky;top:0;z-index:5;background:var(--navy);padding:10px 0;display:flex;align-items:center;gap:10px}
+.bar .back{background:var(--navy2);color:#fff;border:1px solid #2a4f77;border-radius:10px;padding:7px 12px;font-size:15px;cursor:pointer}
+.bar .ttl{color:#fff;font-weight:700;font-size:15.5px;flex:1}
+.timer{background:var(--navy2);border:1px solid #2a4f77;color:#fff;border-radius:10px;padding:6px 10px;font-size:15px;min-width:64px;text-align:center}
+.timer.low{background:var(--bad);border-color:var(--bad)}
+.qcard{background:var(--card);border-radius:16px;padding:16px;margin-top:12px}
+.qnum{color:var(--gold);font-weight:700;font-size:14px}
+.qimg{margin:10px 0;background:#fff;border-radius:8px;overflow:hidden;text-align:center}
+.qimg img{width:100%;height:auto;display:block}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.opt{background:var(--paper);border:2px solid #cbb26a;border-radius:12px;padding:14px;font-size:20px;font-weight:700;color:var(--navy);cursor:pointer}
+.opt.sel{background:var(--gold2);border-color:var(--navy)}
+.opt.right{background:#d9f0e1;border-color:var(--ok)}
+.opt.wrong{background:#f6dcda;border-color:var(--bad)}
+.freein{display:flex;gap:8px;margin-top:8px}
+.freein input{flex:1;font-size:18px;padding:12px;border-radius:12px;border:2px solid #cbb26a;background:var(--paper);text-align:center}
+.btn{background:var(--navy);color:#fff;border:none;border-radius:12px;padding:13px 22px;font-size:16px;font-weight:700;cursor:pointer}
+.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3d2c05}
+.btn.ghost{background:#e8eef4;color:var(--navy)}
+.btnrow{display:flex;gap:10px;margin-top:14px;justify-content:center;flex-wrap:wrap}
+.feedback{margin-top:12px;border-radius:12px;padding:12px 14px;font-size:15px}
+.feedback.ok{background:#d9f0e1;border:1.5px solid var(--ok)}
+.feedback.bad{background:#f6dcda;border:1.5px solid var(--bad)}
+.why{background:var(--paper);border:1.5px dashed var(--gold);border-radius:12px;padding:12px;margin-top:10px;font-size:15px}
+.why b{color:var(--navy)}
+.why .r{direction:rtl;margin-top:6px;line-height:1.9}
+.prog{height:8px;background:#dfe6ec;border-radius:6px;overflow:hidden;margin-top:10px}
+.prog i{display:block;height:100%;background:var(--gold)}
+.result{text-align:center;padding:26px 14px}
+.result .big{font-size:44px;font-weight:800;color:var(--navy)}
+.result .msg{font-size:18px;color:var(--navy);font-weight:700;margin-top:6px}
+.review-item{border:1px solid #d8dee5;border-radius:12px;padding:10px;margin-top:10px}
+.review-item .st{font-weight:700;font-size:14px}
+.review-item .st.ok{color:var(--ok)}.review-item .st.bad{color:var(--bad)}
+.review-item .ans{font-size:14px;margin-top:4px;color:#40525f}
+.note{color:#9fb8cf;font-size:12.5px;text-align:center;margin-top:16px;line-height:1.9}
+.foot{color:#7e96ac;text-align:center;font-size:13px;margin-top:26px;line-height:2}
+.hidden{display:none}
+.install{background:var(--navy2);border:1px solid #2a4f77;border-radius:14px;color:#dce8f3;padding:14px;font-size:14px;line-height:2;margin-top:18px}
+.install b{color:var(--gold2)}
+.center{text-align:center}
+.spin{color:#fff;text-align:center;padding:40px;font-size:16px}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin">جارٍ التحميل…</div></div>
+<script src="../math.js"></script>
+<script src="../scoring.js"></script>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const letters=['أ','ب','ج','د'];
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SUPPORTED=['multiple_choice','number','ratio','percentage','symbolic','choice_set'];
+let TOPICS=null;
+const pageCache={};
+async function loadPage(n){
+  if(pageCache[n])return pageCache[n];
+  const r=await fetch('../pages/'+n+'.json');
+  if(!r.ok)throw new Error('page');
+  const d=await r.json();
+  d.questions=d.questions.filter(q=>SUPPORTED.includes(q.type));
+  pageCache[n]=d;return d;
+}
+async function collect(pages){
+  const out=[];
+  for(const p of pages){const d=await loadPage(p);for(const q of d.questions)out.push({page:p,q});}
+  return out;
+}
+/* ---------- persistent state ---------- */
+const store={
+  get(){try{return JSON.parse(localStorage.getItem('qandil-app-v1'))||{}}catch(e){return{}}},
+  set(o){localStorage.setItem('qandil-app-v1',JSON.stringify(o))},
+  patch(f){const o=store.get();f(o);store.set(o)}
+};
+function recordAnswer(ref,ok){
+  store.patch(o=>{
+    o.wrongs=o.wrongs||{};
+    if(ok){delete o.wrongs[ref];}else{o.wrongs[ref]=Date.now();}
+  });
+}
+function bestScore(id,score,total){
+  store.patch(o=>{o.best=o.best||{};const b=o.best[id];if(!b||score>b.s)o.best[id]={s:score,t:total};});
+}
+function getBest(id){const b=(store.get().best||{})[id];return b?b:null}
+/* ---------- session ---------- */
+let SESS=null; // {mode,title,items:[{page,q}],timed:'q'|'total'|null,perQ:60,totalSec,answers:{i:val},checked:{i:bool},current,startQAt,endsAt}
+let tick=null;
+function stopTick(){if(tick){clearInterval(tick);tick=null;}}
+function startTick(){stopTick();tick=setInterval(()=>{renderTimer();},500);}
+function fmt(s){s=Math.max(0,Math.round(s));const m=Math.floor(s/60),ss=s%60;return ar(m)+':'+ar(String(ss).padStart(2,'0'));}
+function remaining(){
+  if(!SESS||!SESS.timed)return null;
+  if(SESS.timed==='q')return Math.max(0,SESS.perQ-(Date.now()-SESS.startQAt)/1000);
+  return Math.max(0,(SESS.endsAt-Date.now())/1000);
+}
+function renderTimer(){
+  const el=$('#timer');if(!el||!SESS||!SESS.timed)return;
+  const r=remaining();
+  el.textContent=fmt(r);
+  el.classList.toggle('low',r<=10);
+  if(r<=0){onTimeUp();}
+}
+function onTimeUp(){
+  if(SESS.timed==='q'){
+    // close current question and move on
+    if(SESS.current<SESS.items.length-1){goQ(SESS.current+1);}
+    else{finish();}
+  }else{finish();}
+}
+/* ---------- grading ---------- */
+function grade(q,a){
+  if(a===null||a===undefined||a==='')return null;
+  try{return scoreAnswer(q,a);}catch(e){return null;}
+}
+function correctText(q){
+  const s=q.answerSpec||{};
+  if(q.type==='multiple_choice')return letters[(s.option_index_1based||1)-1];
+  if(q.type==='choice_set')return (s.option_indices_1based||[]).map(i=>letters[i-1]).join('، ');
+  return q.answerDisplay!=null?String(q.answerDisplay):'—';
+}
+/* ---------- views ---------- */
+const view=()=> $('#app');
+function header(){return `<div class="hero"><img class="logo" src="data:image/png;base64,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" alt="القنديل"><h1>القنديل للكمي</h1><div class="sub">تدريب واختبارات القدرات الكمي من مذكرة القنديل</div><div class="by">إعداد أ/ أحمد عادل</div></div>`;}
+function barHTML(title,withTimer){
+  return `<div class="bar"><button class="back" onclick="goBack()">رجوع</button><div class="ttl">${esc(title)}</div>${withTimer?'<div class="timer" id="timer"></div>':''}</div>`;
+}
+let BACK='#home';
+function goBack(){stopTick();route(BACK);}
+function home(){
+  stopTick();BACK='#home';
+  const t=TOPICS.totals;
+  const wrongs=Object.keys(store.get().wrongs||{}).length;
+  const resumed=store.get().session;
+  view().innerHTML=header()+`
+  <div class="stats">
+    <span class="chip"><b>${ar(t.supported)}</b> سؤالًا</span>
+    <span class="chip"><b>${ar(25)}</b> اختبار درس</span>
+    <span class="chip"><b>${ar(26)}</b> درسًا</span>
+  </div>
+  <div class="menu">
+    ${resumed?`<button class="mbtn gold" onclick="resume()"><span class="ic">▶️</span><span>متابعة آخر اختبار<small>أكمل من حيث توقفت</small></span></button>`:''}
+    <button class="mbtn" onclick="route('#tests')"><span class="ic">📝</span><span>الاختبارات<small>اختبارات الدروس من المذكرة بوقت، دقيقة لكل سؤال</small></span></button>
+    <button class="mbtn" onclick="route('#train')"><span class="ic">📚</span><span>تدريب حسب الدرس<small>بدون وقت، مع شرح سبب الإجابة فورًا</small></span></button>
+    <button class="mbtn" onclick="startMock()"><span class="ic">⏱️</span><span>اختبار تجريبي شامل<small>${ar(25)} سؤالًا من كل الدروس في ${ar(25)} دقيقة</small></span></button>
+    <button class="mbtn" onclick="route('#wrongs')"><span class="ic">🔁</span><span>مراجعة أخطائي<small>${wrongs?ar(wrongs)+' سؤالًا تحتاج مراجعة':'أخطاؤك السابقة تتجمع هنا للتدريب عليها'}</small></span></button>
+  </div>
+  <div class="install"><b>ثبّت التطبيق على جوالك:</b><br>أندرويد: افتح الرابط في Chrome ثم ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br>آيفون: افتح الرابط في Safari ثم زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».</div>
+  <div class="note">تقدّمك ونتائجك محفوظة على جهازك فقط، بلا حساب ولا تسجيل دخول.</div>
+  <div class="foot">القنديل في الكمي والرياضيات<br>أ/ أحمد عادل — للتواصل: 0575978083</div>`;
+}
+function lessonList(kind){ // kind: 'tests' | 'train'
+  BACK=kind==='tests'?'#tests':'#train';
+  let h=header()+barHTML(kind==='tests'?'اختبارات المذكرة':'التدريب حسب الدرس',false);
+  for(const L of TOPICS.lessons){
+    if(kind==='tests'&&!L.tests.length)continue;
+    const items=kind==='tests'?L.tests.map((t,i)=>{
+      const id='t'+L.id+'-'+i;const b=getBest(id);
+      return `<button class="pill" onclick="startTest(${L.id},${i})"><span>${esc(t.name)}</span><span class="c">${ar(t.qCount)} سؤالًا${b?` · <span class="best">أفضل نتيجة ${ar(b.s)}/${ar(b.t)}</span>`:''}</span></button>`;
+    }).join(''):`<button class="pill" onclick="startTrain(${L.id})"><span>تدريب: ${esc(L.name)}</span><span class="c">${ar(L.trainQ)} سؤالًا</span></button>`;
+    h+=`<div class="card lesson ${L.tests.length<=1?'open':''}"><div class="lesson-head" onclick="this.parentElement.classList.toggle('open')"><span class="t">${ar(L.id)}. ${esc(L.name)}</span><span class="n">▾</span></div><div class="lesson-body"><div class="row">${items}</div></div></div>`;
+  }
+  view().innerHTML=h;
+}
+/* ---------- session starters ---------- */
+async function startTest(lessonId,ti){
+  view().innerHTML='<div class="spin">جارٍ تجهيز الاختبار…</div>';
+  const L=TOPICS.lessons.find(x=>x.id===lessonId);
+  const t=L.tests[ti];
+  const items=await collect(t.pages);
+  newSession({mode:'test',sid:'t'+lessonId+'-'+ti,title:t.name+' — '+L.name,items,timed:'q',perQ:60});
+}
+async function startTrain(lessonId){
+  view().innerHTML='<div class="spin">جارٍ تجهيز التدريب…</div>';
+  const L=TOPICS.lessons.find(x=>x.id===lessonId);
+  const items=await collect(L.trainPages);
+  newSession({mode:'train',sid:'l'+lessonId,title:'تدريب: '+L.name,items,timed:null});
+}
+async function startMock(){
+  view().innerHTML='<div class="spin">جارٍ تجهيز اختبار تجريبي شامل…</div>';
+  const allPages=[];
+  for(const L of TOPICS.lessons){allPages.push(...L.trainPages);for(const t of L.tests)allPages.push(...t.pages);}
+  const uniq=[...new Set(allPages)];
+  const picked=[];const pool=[...uniq];
+  while(picked.length<25&&pool.length){
+    const p=pool.splice(Math.floor(Math.random()*pool.length),1)[0];
+    const d=await loadPage(p);
+    if(d.questions.length)picked.push({page:p,q:d.questions[Math.floor(Math.random()*d.questions.length)]});
+  }
+  newSession({mode:'mock',sid:'mock',title:'اختبار تجريبي شامل',items:picked,timed:'total',totalSec:25*60});
+}
+async function startWrongs(){
+  const w=Object.keys(store.get().wrongs||{});
+  if(!w.length){view().innerHTML=header()+barHTML('مراجعة أخطائي',false)+'<div class="card center" style="margin-top:14px">لا توجد أخطاء مسجلة. أي سؤال تخطئ فيه يُحفظ هنا تلقائيًا لتتدرب عليه.</div>';return;}
+  view().innerHTML='<div class="spin">جارٍ تجهيز مراجعة الأخطاء…</div>';
+  const refs={};for(const r of w){const[p,qid]=r.split('|');(refs[p]=refs[p]||[]).push(qid);}
+  let items=[];
+  for(const p of Object.keys(refs)){const d=await loadPage(Number(p));for(const q of d.questions)if(refs[p].includes(q.id))items.push({page:Number(p),q});}
+  if(!items.length){view().innerHTML=header()+barHTML('مراجعة أخطائي',false)+'<div class="card center" style="margin-top:14px">لا توجد أخطاء مسجلة حاليًا.</div>';return;}
+  newSession({mode:'wrongs',sid:'wrongs',title:'مراجعة أخطائي',items,timed:null});
+}
+function newSession(s){
+  stopTick();
+  SESS=Object.assign({answers:{},checked:{},current:0},s);
+  if(SESS.timed==='total')SESS.endsAt=Date.now()+SESS.totalSec*1000;
+  SESS.startQAt=Date.now();
+  persistSess();
+  startTick();
+  renderQ();
+}
+function persistSess(){
+  // persist lightweight session (without big images) for resume
+  const lite={mode:SESS.mode,sid:SESS.sid,title:SESS.title,timed:SESS.timed,perQ:SESS.perQ,totalSec:SESS.totalSec,answers:SESS.answers,checked:SESS.checked,current:SESS.current,refs:SESS.items.map(it=>({page:it.page,id:it.q.id}))};
+  store.patch(o=>{o.session=lite;});
+}
+async function resume(){
+  const lite=store.get().session;if(!lite)return;
+  view().innerHTML='<div class="spin">جارٍ استئناف الاختبار…</div>';
+  const byPage={};for(const r of lite.refs)(byPage[r.page]=byPage[r.page]||[]).push(r.id);
+  let items=[];
+  for(const p of Object.keys(byPage)){const d=await loadPage(Number(p));for(const q of d.questions)if(byPage[p].includes(q.id))items.push({page:Number(p),q});}
+  const order=lite.refs.map(r=>r.page+'|'+r.id);
+  items.sort((a,b)=>order.indexOf(a.page+'|'+a.q.id)-order.indexOf(b.page+'|'+b.q.id));
+  SESS={mode:lite.mode,sid:lite.sid,title:lite.title,timed:lite.timed,perQ:lite.perQ,answers:lite.answers||{},checked:lite.checked||{},current:lite.current||0,items};
+  if(SESS.timed==='total')SESS.endsAt=Date.now()+(lite.totalSec||1500)*1000;
+  SESS.startQAt=Date.now();
+  startTick();renderQ();
+}
+/* ---------- question rendering ---------- */
+function goQ(i){SESS.current=i;SESS.startQAt=Date.now();persistSess();renderQ();window.scrollTo(0,0);}
+function renderQ(){
+  const it=SESS.items[SESS.current];const q=it.q;const i=SESS.current;
+  const n=SESS.items.length;
+  const checked=!!SESS.checked[i];
+  const a=SESS.answers[i];
+  let input='';
+  if(q.type==='multiple_choice'){
+    input='<div class="opts">'+letters.map((l,k)=>{
+      let cls='opt';if(a===k)cls+=' sel';
+      if(checked){const ok=grade(q,a);const right=(q.answerSpec.option_index_1based-1)===k;if(right)cls+=' right';else if(a===k)cls+=' wrong';}
+      return `<button class="${cls}" data-k="${k}" ${checked?'disabled':''}>${l}</button>`;
+    }).join('')+'</div>';
+  }else if(q.type==='choice_set'){
+    const sel=Array.isArray(a)?a:[];
+    input='<div class="opts">'+letters.map((l,k)=>{
+      let cls='opt'+(sel.includes(k)?' sel':'');
+      return `<button class="${cls}" data-mk="${k}" ${checked?'disabled':''}>${l}</button>`;
+    }).join('')+'</div><div class="note" style="color:#6b7c8a">اختر كل الإجابات الصحيحة ثم اضغط تأكيد</div>';
+  }else{
+    const hint=q.type==='ratio'?'مثال: 3:5 أو 0.6':q.type==='percentage'?'مثال: 25٪ أو 25':'اكتب الناتج';
+    input=`<div class="freein"><input id="freev" inputmode="text" placeholder="${hint}" value="${a!=null?esc(a):''}" ${checked?'disabled':''}></div>`;
+  }
+  let fb='';
+  if(checked){
+    const ok=grade(q,a);
+    fb=`<div class="feedback ${ok?'ok':'bad'}"><b>${ok?'إجابة صحيحة ✅':'إجابة غير صحيحة ❌'}</b> — الإجابة الصحيحة: <b>${esc(correctText(q))}</b></div>`;
+    if(q.reason)fb+=`<div class="why"><b>لماذا؟</b><div class="r">${esc(q.reason)}</div></div>`;
+    else if(q.answerDisplay!=null&&q.type!=='multiple_choice')fb+=`<div class="why"><b>الناتج:</b> ${esc(q.answerDisplay)}</div>`;
+  }
+  const trainMode=!SESS.timed;
+  view().innerHTML=barHTML(SESS.title,!!SESS.timed)+`
+  <div class="prog"><i style="width:${Math.round((i)/n*100)}%"></i></div>
+  <div class="qcard">
+    <div class="qnum">سؤال ${ar(i+1)} من ${ar(n)} · صفحة ${ar(it.page)} من المذكرة</div>
+    <div class="qimg"><img src="${q.readerImage||q.image}" alt="السؤال"></div>
+    ${input}
+    ${fb}
+    <div class="btnrow">
+      ${!checked?`<button class="btn gold" id="confirm">تأكيد الإجابة</button>`:''}
+      ${checked||!trainMode?(i<n-1?`<button class="btn" id="nextq">السؤال التالي</button>`:`<button class="btn gold" id="finish">إنهاء وعرض النتيجة</button>`):''}
+      ${trainMode&&!checked?`<button class="btn ghost" id="skipq">تخطَّ</button>`:''}
+    </div>
+  </div>`;
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{SESS.answers[i]=Number(b.dataset.k);if(SESS.timed){confirmAnswer();}else{renderQ();}});
+  document.querySelectorAll('[data-mk]').forEach(b=>b.onclick=()=>{const k=Number(b.dataset.mk);let arr=Array.isArray(SESS.answers[i])?[...SESS.answers[i]]:[];arr=arr.includes(k)?arr.filter(x=>x!==k):[...arr,k];SESS.answers[i]=arr;renderQ();});
+  const cf=$('#confirm');if(cf)cf.onclick=confirmAnswer;
+  const nx=$('#nextq');if(nx)nx.onclick=()=>goQ(i+1);
+  const fn=$('#finish');if(fn)fn.onclick=finish;
+  const sk=$('#skipq');if(sk)sk.onclick=()=>goQ(Math.min(i+1,n-1));
+  const fi=$('#freev');if(fi){fi.addEventListener('keydown',e=>{if(e.key==='Enter')confirmAnswer();});}
+  if(SESS.timed)renderTimer();
+}
+function confirmAnswer(){
+  const i=SESS.current;const q=SESS.items[i].q;
+  if(q.type!=='multiple_choice'&&q.type!=='choice_set'){const fi=$('#freev');if(fi)SESS.answers[i]=fi.value;}
+  if(SESS.answers[i]===undefined||SESS.answers[i]===''||(Array.isArray(SESS.answers[i])&&!SESS.answers[i].length))return;
+  if(!SESS.timed){
+    SESS.checked[i]=true;
+    const ok=grade(q,SESS.answers[i]);
+    recordAnswer(SESS.items[i].page+'|'+q.id,!!ok);
+    if(SESS.mode==='train'||SESS.mode==='wrongs'){
+      store.patch(o=>{o.tp=o.tp||{};const k=SESS.sid;o.tp[k]=o.tp[k]||{a:0,c:0};o.tp[k].a++;if(ok)o.tp[k].c++;});
+    }
+  }else{
+    SESS.checked[i]=true;
+    recordAnswer(SESS.items[i].page+'|'+q.id,!!grade(q,SESS.answers[i]));
+    // timed: auto-advance after short pause
+    persistSess();
+    setTimeout(()=>{if(SESS&&SESS.current===i){if(i<SESS.items.length-1)goQ(i+1);else finish();}},650);
+    return;
+  }
+  persistSess();renderQ();
+}
+function finish(){
+  stopTick();
+  const n=SESS.items.length;let score=0;const rows=[];
+  SESS.items.forEach((it,i)=>{
+    const a=SESS.answers[i];
+    const ok=grade(it.q,a)===true;
+    if(ok)score++;
+    rows.push({i,it,a,ok});
+  });
+  if(SESS.mode==='test')bestScore(SESS.sid,score,n);
+  store.patch(o=>{delete o.session;});
+  const pct=n?score/n:0;
+  const msg=pct>=.9?'ممتاز! نتيجة رائعة':pct>=.75?'جيد جدًا، قريب من التمام':pct>=.5?'جيد، راجع أخطاءك وستتحسن':'تحتاج تدريبًا أكثر على هذا الدرس';
+  let h=barHTML('النتيجة — '+SESS.title,false);
+  h+=`<div class="card result"><div class="big">${ar(score)} / ${ar(n)}</div><div class="msg">${msg}</div><div style="color:#6b7c8a;margin-top:6px">${ar(Math.round(pct*100))}٪</div>
+  <div class="btnrow"><button class="btn gold" onclick="route('#tests')">الاختبارات</button><button class="btn" onclick="route('#wrongs');startWrongs()">راجع أخطاءك</button><button class="btn ghost" onclick="route('#home')">الرئيسية</button></div></div>`;
+  h+='<h2 class="sec">مراجعة الأسئلة</h2>';
+  for(const r of rows){
+    h+=`<div class="card review-item"><div class="st ${r.ok?'ok':'bad'}">${r.ok?'✅':'❌'} سؤال ${ar(r.i+1)} — صفحة ${ar(r.it.page)}</div>
+    <div class="qimg"><img loading="lazy" src="${r.it.q.readerImage||r.it.q.image}"></div>
+    <div class="ans">إجابتك: <b>${esc(respLabel(r.it.q,r.a))}</b> · الصحيح: <b>${esc(correctText(r.it.q))}</b></div>
+    ${r.it.q.reason?`<div class="why"><b>لماذا؟</b><div class="r">${esc(r.it.q.reason)}</div></div>`:''}
+    </div>`;
+  }
+  view().innerHTML=h;window.scrollTo(0,0);
+}
+function respLabel(q,a){
+  if(a===undefined||a===null||a==='')return 'بدون إجابة';
+  if(q.type==='multiple_choice')return letters[a]??'—';
+  if(q.type==='choice_set')return Array.isArray(a)?a.map(i=>letters[i]).join('، '):'—';
+  return String(a);
+}
+/* ---------- router ---------- */
+function route(h){
+  location.hash=h;
+  if(h==='#home')home();
+  else if(h==='#tests')lessonList('tests');
+  else if(h==='#train')lessonList('train');
+  else if(h==='#wrongs')startWrongs();
+}
+window.addEventListener('hashchange',()=>{if(!SESS||!$('#timer'))route(location.hash||'#home');});
+const TOPICS_DATA={"lessons": [{"id": 1, "name": "العمليات الحسابية والأعداد الكبيرة", "trainPages": [1, 2, 3, 4, 5], "tests": [{"name": "اختبار الدرس الأول", "pages": [6, 7, 8], "qCount": 20}], "trainQ": 42}, {"id": 2, "name": "قوانين هامة في القدرات", "trainPages": [9, 10, 11, 12, 13, 14, 15, 16], "tests": [{"name": "اختبار الدرس الثاني", "pages": [17, 18, 19, 20], "qCount": 23}], "trainQ": 41}, {"id": 3, "name": "الاحتمالات والإحصاء", "trainPages": [21, 22, 23, 24, 25], "tests": [{"name": "اختبار الدرس الثالث", "pages": [26, 27, 28], "qCount": 18}], "trainQ": 27}, {"id": 4, "name": "أسرع الطرق لحل سؤال القدرات", "trainPages": [29, 30, 31, 32, 33, 34], "tests": [{"name": "اختبار الدرس الرابع", "pages": [35, 36, 37, 38], "qCount": 24}], "trainQ": 40}, {"id": 5, "name": "الدوريات والأنماط", "trainPages": [39, 40, 41, 42, 43, 44], "tests": [{"name": "اختبار الدرس الخامس", "pages": [45, 46, 47, 48, 49], "qCount": 19}], "trainQ": 32}, {"id": 6, "name": "التبسيط والاختصارات والقسمة", "trainPages": [50, 51, 52, 53, 54, 55], "tests": [{"name": "اختبار الدرس السادس", "pages": [56, 57, 58], "qCount": 22}], "trainQ": 48}, {"id": 7, "name": "المعادلات والمربعات الكاملة والفرق بين مربعين", "trainPages": [59, 60, 61, 62, 63], "tests": [{"name": "اختبار الدرس السابع", "pages": [64, 65, 66, 67], "qCount": 28}], "trainQ": 36}, {"id": 8, "name": "المضاعف والقاسم", "trainPages": [68], "tests": [], "trainQ": 6}, {"id": 9, "name": "الأعداد العشرية", "trainPages": [69, 70, 71, 72, 73, 74, 75], "tests": [{"name": "اختبار ١ على الأعداد العشرية", "pages": [76, 77, 78, 79], "qCount": 23}], "trainQ": 57}, {"id": 10, "name": "الكسور", "trainPages": [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94], "tests": [{"name": "اختبار ١ على الكسور", "pages": [95, 96, 97], "qCount": 18}, {"name": "اختبار ٢ على الكسور", "pages": [98, 99, 100, 101], "qCount": 17}], "trainQ": 98}, {"id": 11, "name": "الجذور", "trainPages": [102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112], "tests": [{"name": "اختبار ١ على الجذور", "pages": [113, 114], "qCount": 13}, {"name": "اختبار ٢ على الجذور", "pages": [115, 116, 117], "qCount": 19}], "trainQ": 79}, {"id": 12, "name": "الأسس", "trainPages": [118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133], "tests": [{"name": "اختبار ١ على الأسس", "pages": [134, 135, 136], "qCount": 19}, {"name": "اختبار ٢ على الأسس", "pages": [137, 138, 139], "qCount": 16}], "trainQ": 122}, {"id": 13, "name": "السرعة والمسافة والزمن", "trainPages": [140, 141, 142, 143, 144, 145, 146, 147], "tests": [{"name": "اختبار ١ على السرعات", "pages": [148, 149, 150], "qCount": 13}], "trainQ": 46}, {"id": 14, "name": "النسبة والنسبة المئوية", "trainPages": [151, 152, 153, 154, 155, 156, 157], "tests": [{"name": "اختبار ١ على النسب المئوية", "pages": [158, 159, 160], "qCount": 20}, {"name": "اختبار ٢ على النسب المئوية", "pages": [161, 162, 163, 164], "qCount": 19}], "trainQ": 38}, {"id": 15, "name": "المكسب والخسارة والسعر الأصلي", "trainPages": [165, 166, 167, 168], "tests": [{"name": "اختبار ١ على المكسب والخسارة", "pages": [169, 170], "qCount": 16}, {"name": "اختبار ٢ على المكسب والخسارة", "pages": [171, 172, 173], "qCount": 15}], "trainQ": 27}, {"id": 16, "name": "التناسب الطردي والعكسي", "trainPages": [174, 175, 176, 177, 178], "tests": [{"name": "اختبار ١ على التناسب", "pages": [179, 180, 181], "qCount": 19}], "trainQ": 37}, {"id": 17, "name": "الوسط الحسابي", "trainPages": [182, 183, 184, 185, 186, 187], "tests": [], "trainQ": 38}, {"id": 18, "name": "الزوايا والمثلثات", "trainPages": [188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234], "tests": [], "trainQ": 104}, {"id": 19, "name": "المثلث", "trainPages": [235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261], "tests": [{"name": "اختبار ١ على المثلث", "pages": [262, 263, 264, 265, 266, 267, 268], "qCount": 14}], "trainQ": 60}, {"id": 20, "name": "المستطيل", "trainPages": [269, 270, 271, 272, 273, 274, 275, 276], "tests": [{"name": "اختبار ١ على المستطيل", "pages": [277, 278, 279, 280, 281, 282], "qCount": 15}], "trainQ": 29}, {"id": 21, "name": "المربع", "trainPages": [283, 284, 285, 286, 287, 288, 289, 290, 291, 294, 295, 296, 297, 298], "tests": [], "trainQ": 37}, {"id": 22, "name": "المعين والمتوازي وشبه المنحرف", "trainPages": [299, 300, 301, 302, 303, 304], "tests": [], "trainQ": 12}, {"id": 23, "name": "المساحات المظللة", "trainPages": [305, 306, 307, 308, 309, 310], "tests": [], "trainQ": 14}, {"id": 24, "name": "الدائرة", "trainPages": [312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336], "tests": [{"name": "اختبار ١ على الدائرة", "pages": [337, 338, 339, 340, 341, 342, 343], "qCount": 11}], "trainQ": 66}, {"id": 25, "name": "التوازي", "trainPages": [344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355], "tests": [{"name": "اختبار ١ على التوازي", "pages": [356, 357, 358, 359, 360, 361, 362], "qCount": 12}], "trainQ": 22}, {"id": 26, "name": "الأشكال ثلاثية الأبعاد", "trainPages": [363, 364, 365, 366, 367], "tests": [{"name": "اختبار ١ على ثلاثيات الأبعاد", "pages": [368, 369, 370, 371], "qCount": 16}], "trainQ": 24}], "totals": {"train": 1182, "test": 449, "supported": 1631}};
+async function boot(){
+  TOPICS=TOPICS_DATA;
+  route(location.hash||'#home');
+}
+boot().catch(e=>{view().innerHTML='<div class="spin">تعذر تحميل بيانات التطبيق. تحقق من الاتصال ثم حدّث الصفحة.</div>';});
+</script>
+</body>
+</html>
