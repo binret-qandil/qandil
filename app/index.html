@@ -156,7 +156,7 @@ async function loadPage(n){
 }
 async function collect(pages){
   const out=[];
-  for(const p of pages){const d=await loadPage(p);for(const q of d.questions)out.push({page:p,q});}
+  for(const p of pages){if(!OFFLINE_PAGES.includes(p))continue;const d=await loadPage(p);for(const q of d.questions)out.push({page:p,q});}
   return out;
 }
 /* ---------- persistent state ---------- */
@@ -288,7 +288,7 @@ async function startMock(){
   view().innerHTML='<div class="spin">جارٍ تجهيز اختبار تجريبي شامل…</div>';
   const allPages=[];
   for(const L of TOPICS.lessons){allPages.push(...L.trainPages);for(const t of L.tests)allPages.push(...t.pages);}
-  const uniq=[...new Set(allPages)];
+  const uniq=[...new Set(allPages)].filter(p=>OFFLINE_PAGES.includes(p));
   const picked=[];const pool=[...uniq];
   while(picked.length<25&&pool.length){
     const p=pool.splice(Math.floor(Math.random()*pool.length),1)[0];
@@ -304,7 +304,7 @@ async function startWrongs(){
   const W=store.get().wrongs||{};
   const refs={};for(const r of w){const[p,qid]=r.split('|');(refs[p]=refs[p]||[]).push(qid);}
   let items=[];
-  for(const p of Object.keys(refs)){const d=await loadPage(Number(p));for(const q of d.questions)if(refs[p].includes(q.id))items.push({page:Number(p),q,wrec:normW(W[p+'|'+q.id])});}
+  for(const p of Object.keys(refs)){let d;try{d=await loadPage(Number(p));}catch(e){continue;}for(const q of d.questions)if(refs[p].includes(q.id))items.push({page:Number(p),q,wrec:normW(W[p+'|'+q.id])});}
   items.sort((a,b)=>((a.wrec.corrected)?1:0)-((b.wrec.corrected)?1:0));
   if(!items.length){view().innerHTML=header()+barHTML('مراجعة أخطائي',false)+'<div class="card center" style="margin-top:14px">لا توجد أخطاء مسجلة حاليًا.</div>';return;}
   newSession({mode:'wrongs',sid:'wrongs',title:'مراجعة أخطائي',items,timed:null});
